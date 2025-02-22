@@ -10,7 +10,17 @@ const images = {
   support: "/src/assets/icons/support.svg",
   tracking: "/src/assets/icons/tracking.svg",
   userManagement: "/src/assets/icons/user_management.svg",
+  user: "/src/assets/icons/user.svg",
+  rider: "/src/assets/icons/rider.svg",
+  activate: "/src/assets/icons/activate.svg",
+  deactivate: "/src/assets/icons/deactivate.svg",
+  revenue: "/src/assets/icons/revenue.svg",
+  delivery: "/src/assets/icons/delivery.svg",
+  schedule: "/src/assets/icons/schedule.svg",
+  completed: '/src/assets/icons/completed.svg',
   admin: "/src/assets/images/admin.png",
+  signal: "/src/assets/icons/signal.png",
+
 };
 
 export default images;

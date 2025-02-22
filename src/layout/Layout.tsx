@@ -36,7 +36,7 @@ const Layout: React.FC = () => {
               <Profile />
             </div>
           </div>
-          <div className="p-8">
+          <div className="p-2">
             <Outlet />
           </div>
         </div>
