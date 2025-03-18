@@ -53,7 +53,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setMobileOpen }) => {
             </div>
 
             {/* Menu Items */}
-            <nav className="mt-4 px-4">
+            <nav className="mt-4">
                 <ul className="space-y-2">
                     {Sidebar_links.map((x, index) => (
                         <li key={index}>

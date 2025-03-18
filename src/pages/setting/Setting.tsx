@@ -1,10 +1,15 @@
 import React from "react";
+import SettingHeader from "./component/SettingHeader";
+import General from "./portions/General";
+import { useLocation } from "react-router-dom";
 
 const Setting = () => {
+  const url = useLocation().pathname;
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold">Welcome to the Setting Page</h1>
-    </div>
+    <>
+      <SettingHeader url={url} />
+      <General/>
+    </>
   );
 };
 

@@ -26,13 +26,13 @@ export const Sidebar_links = [
     sublinks: [],
   },
   {
-    name: "Tracking",
+    name: "Tracking & Location",
     link: "/tracking",
     icon: images.tracking,
     sublinks: [],
   },
   {
-    name: "Earnings",
+    name: "Earnings Report",
     link: "/earnings",
     icon: images.earning,
     sublinks: [],
@@ -63,7 +63,7 @@ export const Sidebar_links = [
   },
   {
     name: "Settings",
-    link: "/settings",
+    link: "/settings/general",
     icon: images.setting,
     sublinks: [],
   },

@@ -68,3 +68,10 @@
 .toggle {
   cursor: pointer;
 }
+body,* {
+  font-family: "Geist", sans-serif;
+}
+
+button {
+  cursor: pointer !important;
+}
