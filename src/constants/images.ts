@@ -1,3 +1,4 @@
+
 const images = {
   booking: "/src/assets/icons/booking.svg",
   dashboard: "/src/assets/icons/dashboard.svg",
@@ -20,7 +21,10 @@ const images = {
   completed: '/src/assets/icons/completed.svg',
   admin: "/src/assets/images/admin.png",
   signal: "/src/assets/icons/signal.png",
-
+  ProfileNotifcation : '/src/assets/icons/notification.png',
+  profileBell : '/src/assets/icons/edit.png',
+  del : '/src/assets/icons/del.png',
+  warning : '/src/assets/icons/Warning.png'
 };
 
 export default images;

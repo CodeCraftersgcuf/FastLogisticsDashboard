@@ -9,11 +9,10 @@ interface ProfileProps {
 const Profile: React.FC<ProfileProps> = ({ name = "Admin", img = images.admin }) => {
   return (
     <div className="flex items-center gap-4 ">
+      <img src={img} alt="profile" className="w-14 h-14 rounded-full" />
       <div>
-        <h4 className="text-lg ">Hey,</h4>
-        <h2 className="text-xl">{name}</h2>
+        <h4 className="text-lg ">Hey, {name}</h4>
       </div>
-      <img src={img} alt="profile" className="w-14 h-14 rounded-md" />
     </div>
   );
 };

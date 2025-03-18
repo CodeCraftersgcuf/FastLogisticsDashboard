@@ -22,8 +22,8 @@ interface LatestBookingsProps {
 
 const LatestBookings: React.FC<LatestBookingsProps> = ({ bookings, actionButton, title }) => {
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md overflow-x-auto">
-      <h2 className="text-lg font-semibold mb-4">{title}</h2> {/* Dynamic Title */}
+    <div className="bg-white rounded-lg shadow-md overflow-x-auto">
+      <h2 className="text-lg font-semibold  p-4">{title}</h2> {/* Dynamic Title */}
       <table className="w-full border-collapse">
         <thead>
           <tr className="bg-gray-200 text-left">
@@ -59,8 +59,8 @@ const LatestBookings: React.FC<LatestBookingsProps> = ({ bookings, actionButton,
                 {booking.address}
               </td>
               {booking.payOnDelivery && <td className="p-2">{booking.payOnDelivery}</td>}
-              {booking.pickupTime && <td className="p-2">{booking.pickupTime}</td>}
-              {booking.dropTime && <td className="p-2">{booking.dropTime}</td>}
+              {booking.pickupTime && <td className="p-2">{booking.pickupTime.replace('|','')}</td>}
+              {booking.dropTime && <td className="p-2">{booking.dropTime.replace('|','')}</td>}
               {booking.status && (
                 <td className="p-2">
                   <span className="w-4 h-4 inline-block bg-green-500 rounded-full"></span>
