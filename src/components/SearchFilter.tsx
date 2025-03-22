@@ -10,7 +10,7 @@ interface SearchFilterProps {
 
 const SearchFilter: React.FC<SearchFilterProps> = ({
   Icon = null,
-  Placeholder = "Search User",
+  Placeholder = "Search",
   className = "text-gray-600",
   handleFunction = () => console.log("search button"),
   bgColor

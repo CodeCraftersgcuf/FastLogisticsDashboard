@@ -22,7 +22,7 @@ const Filter: React.FC<FilterProps> = ({ tabs, handleValue, activeTab, tabPaddin
   
 
   return (
-    <div className="flex items-center gap-2 bg-theme-dark w-fit rounded-lg p-1 px-2 border border-gray-300">
+    <div className="flex items-center gap-2 bg-theme-dark w-fit rounded-lg p-1 px-2 border border-gray-300 bg-white">
       {tabs.map((tab, index) => (
         <button
           key={index}
