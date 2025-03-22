@@ -26,8 +26,14 @@ export const Sidebar_links = [
     sublinks: [],
   },
   {
+    name: "Transactions",
+    link: "/transactions",
+    icon: images.transactions,
+    sublinks: [],
+  },
+  {
     name: "Tracking & Location",
-    link: "/tracking",
+    link: "/tracking&location",
     icon: images.tracking,
     sublinks: [],
   },
@@ -50,8 +56,8 @@ export const Sidebar_links = [
     sublinks: [],
   },
   {
-    name: "Statements",
-    link: "/statements",
+    name: "Analytics",
+    link: "/analytics",
     icon: images.statement,
     sublinks: [],
   },

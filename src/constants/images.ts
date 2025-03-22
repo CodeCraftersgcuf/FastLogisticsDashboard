@@ -24,7 +24,10 @@ const images = {
   ProfileNotifcation : '/src/assets/icons/notification.png',
   profileBell : '/src/assets/icons/edit.png',
   del : '/src/assets/icons/del.png',
-  warning : '/src/assets/icons/Warning.png'
+  warning : '/src/assets/icons/Warning.png',
+  delBlack : '/src/assets/icons/delBlack.png',
+  editBlack : '/src/assets/icons/editBlack.png',
+  transactions : '/src/assets/icons/transactions.svg'
 };
 
 export default images;

@@ -15,14 +15,15 @@ interface UserProfileProps {
     profilePicture?: string;
     status: 'online' | 'offline';
   };
+  disabledLeft?:boolean;
 }
 
-const UserProfile: React.FC<UserProfileProps> = ({ userData }) => {
+const UserProfile: React.FC<UserProfileProps> = ({ userData,disabledLeft }) => {
   return (
     <div className="bg-[#470434] text-white rounded-2xl shadow-lg ">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className={`grid grid-cols-1 ${ disabledLeft ? "lg:grid-cols-9" : "lg:grid-cols-12"} gap-6`}>
         {/* Left Section - Wallet */}
-        <div className="space-y-6 lg:col-span-3 bg-[#620748] p-6 rounded-l-2xl">
+        {!disabledLeft && <div className={`space-y-6 lg:col-span-3 bg-[#620748] p-6 rounded-l-2xl`}>
           <h2 className="text-lg opacity-90">Wallet Balance</h2>
           <p className="text-4xl font-bold">₦{userData.walletBalance.toLocaleString()}</p>
           <div className="flex gap-4">
@@ -33,11 +34,11 @@ const UserProfile: React.FC<UserProfileProps> = ({ userData }) => {
               Withdraw
             </button>
           </div>
-        </div>
+        </div>}
 
         {/* Right Section - User Info */}
         <div className="flex items-start gap-6 lg:col-span-9 p-6 pl-2">
-          <div className="relative">
+          <div className={`relative ${disabledLeft && "lg:mx-6"}`}>
             <div className="w-20 h-20 rounded-full bg-gray-200 overflow-hidden">
               {userData.profilePicture ? (
                 <img

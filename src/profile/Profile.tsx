@@ -30,7 +30,7 @@ const Profile = () => {
 
   return (
     <>
-      <ProfileHeader handlePeriod={handleDetailsClick} />
+      <ProfileHeader url='activity' handlePeriod={handleDetailsClick} />
       <div className='flex flex-col gap-6 p-6'>
         <UserProfile userData={userData} />
         <ItemGap>
