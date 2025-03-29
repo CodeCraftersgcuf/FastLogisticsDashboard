@@ -9,12 +9,10 @@ interface Props {
     };
     onDelete?: (del: any) => void;
     onEdit?: (edit: any) => void;
-    index?: number;
 }
 
 const LocalizationRow: React.FC<Props> = ({
     displayData,
-    index,
     onDelete,
     onEdit,
 }) => {

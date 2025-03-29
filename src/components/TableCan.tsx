@@ -50,13 +50,13 @@ const TableCan = <T,>({
                             dataTr.map((data, index) => {
                                 if (typeof TrName === 'function') {
                                     if (TrName.length > 1) {
-                                        return <TrName key={index} displayData={data} index={index} {...TrPropsName} />;
+                                        return <TrName key={index} displayData={data}  {...TrPropsName} />;
                                     } else {
                                         const TrComponent = TrName;
-                                        return <TrComponent key={index} displayData={data} index={index} {...TrPropsName} />;
+                                        return <TrComponent key={index} displayData={data}  {...TrPropsName} />;
                                     }
                                 } else {
-                                    return <TrName key={index} displayData={data} index={index} {...TrPropsName} />;
+                                    return <TrName key={index} displayData={data}  {...TrPropsName} />;
                                 }
                             })
                         ) : (

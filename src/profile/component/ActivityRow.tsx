@@ -7,11 +7,11 @@ interface props {
         activity: string;
         created_at: string;
     };
-    index: number;
+    // index: number;
 }
 
 
-const ActivityRow: React.FC<props> = ({ displayData, index }) => {
+const ActivityRow: React.FC<props> = ({ displayData }) => {
     return (
         <tr className="hover:bg-gray-100 transition cursor-pointer relative"> {/* Removed border-b */}
             <td className="p-4 w-10">

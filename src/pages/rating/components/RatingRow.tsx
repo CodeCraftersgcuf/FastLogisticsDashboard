@@ -19,11 +19,10 @@ interface props {
         comment?: string;
         rating: number;
     };
-    index: number;
 }
 
 
-const RatingRow: React.FC<props> = ({ displayData, index }) => {
+const RatingRow: React.FC<props> = ({ displayData }) => {
 
     function ratingStar(rating: number) {
         return Array.from({ length: 5 }, (_, i) => (

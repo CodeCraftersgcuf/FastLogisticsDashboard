@@ -1,30 +1,70 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import Dropdown from "../../components/Dropdown";
 import HorizontalAlign from "../../components/HorizontalAlign";
 import { bulkOptions, DateDropOptions, onlineStatus, riderStatus, tierStatus } from "../../components/FilterData";
-import { riderStats, riderTableStatic, userStatic, userTableStatic } from '../../constants/statisticsData'
+import { riderStats, riderTableStatic } from '../../constants/statisticsData'
 import StatCard from "../../components/StatCard";
 import Button from "../../components/buttons/Button";
 import ItemGap from "../../components/ItemGap";
 import SearchFilter from "../../components/SearchFilter";
 import TableCan from "../../components/TableCan";
 import AddUserModal from "../userManagement/components/AddUserModal";
-import UsersRow from "../userManagement/components/UsersRow";
 import RiderRow from "./component/RiderRow";
 import { useNavigate } from "react-router-dom";
 
-const RiderManagement = () => {
+const RiderManagement : React.FC = () => {
+  const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState('7'); // Default to "This week"
+  const [selectedRiderStatus, setSelectedRiderStatus] = useState('all');
+  const [selectedTier, setSelectedTier] = useState('all');
+  const [selectedOnlineStatus, setSelectedOnlineStatus] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const handleDetailsClick = (booking: any) => {
-    console.log("View details for:", booking);
+  // Filter riders based on all criteria
+  const filteredRiders = useMemo(() => {
+    return riderTableStatic.filter(rider => {
+      const matchesRiderStatus = selectedRiderStatus === 'all' || rider.status.toLowerCase() === selectedRiderStatus.toLowerCase();
+      const matchesTier = selectedTier === 'all' || rider.tier.toLowerCase() === selectedTier.toLowerCase();
+      const matchesOnlineStatus = selectedOnlineStatus === 'all' || rider.status.toLowerCase() === selectedOnlineStatus.toLowerCase();
+      const matchesSearch = rider.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          rider.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          rider.phone.toLowerCase().includes(searchQuery.toLowerCase());
+
+      return matchesRiderStatus && matchesTier && matchesOnlineStatus && matchesSearch;
+    });
+  }, [selectedRiderStatus, selectedTier, selectedOnlineStatus, searchQuery]);
+
+  const handleDateChange = (value: string) => {
+    setSelectedDate(value);
+    // Here you would typically fetch data for the selected date range
+  };
+
+  const handleRiderStatusChange = (status: string) => {
+    setSelectedRiderStatus(status);
+  };
+
+  const handleTierChange = (tier: string) => {
+    setSelectedTier(tier);
+  };
+
+  const handleOnlineStatusChange = (status: string) => {
+    setSelectedOnlineStatus(status);
+  };
+
+  const handleBulkAction = (action: string) => {
+    console.log("Bulk action selected:", action);
+    // Implement bulk actions here
+  };
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
   };
 
   const handleAddUser = (values: any) => {
     console.log("New user data:", values);
-    // Handle the new user data here (e.g., API call)
+    setIsModalOpen(false);
   };
-  const navigate = useNavigate()
 
   return (
     <div className="">
@@ -38,7 +78,7 @@ const RiderManagement = () => {
               </Button>
               <Dropdown
                 options={DateDropOptions}
-                onChange={handleDetailsClick}
+                onChange={handleDateChange}
                 placeholder="This Week"
                 position="right-0"
               />
@@ -56,25 +96,25 @@ const RiderManagement = () => {
           <ItemGap>
             <Dropdown
               options={riderStatus}
-              onChange={handleDetailsClick}
+              onChange={handleRiderStatusChange}
               placeholder="All"
               position="left-0"
             />
             <Dropdown
               options={tierStatus}
-              onChange={handleDetailsClick}
+              onChange={handleTierChange}
               placeholder="Tiers"
               position="left-0"
             />
             <Dropdown
               options={onlineStatus}
-              onChange={handleDetailsClick}
+              onChange={handleOnlineStatusChange}
               placeholder="Status"
               position="left-0"
             />
             <Dropdown
               options={bulkOptions}
-              onChange={handleDetailsClick}
+              onChange={handleBulkAction}
               placeholder="Bulk Actions"
               position="left-0"
             />
@@ -83,7 +123,7 @@ const RiderManagement = () => {
             <Button handleFunction={() => setIsModalOpen(true)}>
               Add New User
             </Button>
-            <SearchFilter/>
+            <SearchFilter handleFunction={handleSearch} />
           </ItemGap>
         </HorizontalAlign>
 
@@ -91,7 +131,7 @@ const RiderManagement = () => {
           heading="All Riders"
           showHeading={true}
           headerTr={['Rider Name','Email','Phone No','Wallet Balance','Status','tier','Actions','Other']}
-          dataTr={riderTableStatic}
+          dataTr={filteredRiders}
           TrName={RiderRow}
         />
 

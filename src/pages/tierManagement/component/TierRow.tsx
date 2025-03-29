@@ -1,7 +1,6 @@
 import React from 'react'
-import { dummyImage,  formatCreatedAt } from '../../../constants/help';
-import Button from '../../../components/buttons/Button';
-import { useNavigate, useNavigation } from 'react-router-dom';
+import {formatCreatedAt } from '../../../constants/help';
+import { useNavigate } from 'react-router-dom';
 import images from '../../../constants/images';
 
 interface props {
@@ -14,12 +13,10 @@ interface props {
         created_at:string;
         status: string;
     };
-    index: number;
 }
 
 
-const TierRow: React.FC<props> = ({ displayData, index }) => {
-    const navigate =  useNavigate();
+const TierRow: React.FC<props> = ({ displayData }) => {
     return (
         <tr className="hover:bg-gray-100 transition cursor-pointer relative"> {/* Removed border-b */}
             <td className="p-2 px-4 w-10">

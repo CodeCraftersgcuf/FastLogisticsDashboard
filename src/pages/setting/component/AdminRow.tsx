@@ -14,11 +14,10 @@ interface props {
         created_at:string;
         status: string;
     };
-    index: number;
 }
 
 
-const AdminRow: React.FC<props> = ({ displayData, index }) => {
+const AdminRow: React.FC<props> = ({ displayData }) => {
     const navigate =  useNavigate();
     return (
         <tr className="hover:bg-gray-100 transition cursor-pointer relative"> {/* Removed border-b */}

@@ -45,12 +45,12 @@ const TierManagement = () => {
                         Add New
                     </Button>
                 </HorizontalAlign>
-                <TableCan 
+                <TableCan
                     heading='Tiers'
                     showHeading={true}
-                    headerTr={['Tier Number','no of riders','commission','tier amount','date created','status','action']}
+                    headerTr={['Tier Number', 'no of riders', 'commission', 'tier amount', 'date created', 'status', 'action']}
                     dataTr={[]}
-                    TrName={()=>null}
+                    TrName={() => null}
                 />
             </div>
         </>

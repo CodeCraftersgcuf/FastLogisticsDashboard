@@ -3,6 +3,7 @@ import { dummyImage, formatAmount } from '../../../constants/help';
 import Button from '../../../components/buttons/Button';
 import MoreDropdown from '../../../components/MoreDropdown';
 import { useNavigate, useNavigation } from 'react-router-dom';
+import { AlertOctagon, AlertTriangle } from 'lucide-react';
 
 interface props {
     displayData: {
@@ -14,12 +15,11 @@ interface props {
         wallet_balance: number | string;
         status: string;
     };
-    index: number;
 }
 
 
-const UsersRow: React.FC<props> = ({ displayData, index }) => {
-    const navigate =  useNavigate();
+const UsersRow: React.FC<props> = ({ displayData }) => {
+    const navigate = useNavigate();
     return (
         <tr className="hover:bg-gray-100 transition cursor-pointer relative"> {/* Removed border-b */}
             <td className="p-2 px-4 w-10">
@@ -52,9 +52,18 @@ const UsersRow: React.FC<props> = ({ displayData, index }) => {
             <td className='p-2'>
                 <MoreDropdown
                     iconClass="bi bi-three-dots-vertical"
-                    menuClass="bg-theme-dark min-w-[300px]"
+                    menuClass="bg-theme-dark min-w-[150px] bg-white"
                 >
-                    hamza
+                    <div className='flex flex-col gap-2'>
+                        <button className='flex gap-2 items-center capitalize font-medium py-4 px-3 w-[150px] hover:bg-black/10 cursor-pointer'>
+                            <AlertTriangle size={20} color='black' />
+                            Block User
+                        </button>
+                        <button className='flex gap-2 text-red-500 items-center capitalize font-medium py-4 px-3 w-[150px] hover:bg-black/10 cursor-pointer'>
+                            <AlertOctagon size={20} color='red' />
+                            Delete User
+                        </button>
+                    </div>
                 </MoreDropdown>
             </td>
         </tr>
