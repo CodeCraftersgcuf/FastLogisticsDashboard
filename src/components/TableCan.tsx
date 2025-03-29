@@ -6,7 +6,7 @@ interface TableCanProps<T> {
     ButtonLink?: string;
     headerTr: string[];
     dataTr: T[];
-    TrName: React.ComponentType<any>;
+    TrName: React.ElementType;  // Update to React.ElementType for correct typing
     showHeading?: boolean;
     TrPropsName?: Record<string, any>;
 }
@@ -48,16 +48,8 @@ const TableCan = <T,>({
                     <tbody>
                         {dataTr.length > 0 ? (
                             dataTr.map((data, index) => {
-                                if (typeof TrName === 'function') {
-                                    if (TrName.length > 1) {
-                                        return <TrName key={index} displayData={data}  {...TrPropsName} />;
-                                    } else {
-                                        const TrComponent = TrName;
-                                        return <TrComponent key={index} displayData={data}  {...TrPropsName} />;
-                                    }
-                                } else {
-                                    return <TrName key={index} displayData={data}  {...TrPropsName} />;
-                                }
+                                // Now directly use TrName since it is typed as a React component
+                                return <TrName key={index} displayData={data} {...TrPropsName} />;
                             })
                         ) : (
                             <tr>
