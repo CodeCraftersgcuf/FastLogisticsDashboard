@@ -6,7 +6,7 @@ import Dropdown from '../../components/Dropdown'
 import { DateDropOptions, tierStatus } from '../../components/FilterData'
 import TableCan from '../../components/TableCan'
 
-const TierManagement = () => {
+const TierManagement  : React.FC = () => {
     const handleDetailsClick = (e: any) => {
         console.log(e)
     }

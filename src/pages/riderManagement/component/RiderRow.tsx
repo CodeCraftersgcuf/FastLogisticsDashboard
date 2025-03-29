@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { dummyImage, formatAmount } from '../../../constants/help';
 import Button from '../../../components/buttons/Button';
 import MoreDropdown from '../../../components/MoreDropdown';

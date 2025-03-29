@@ -1,5 +1,5 @@
 import React from 'react';
-import { LocateFixed, LocateIcon, LocateOffIcon, MapPin } from 'lucide-react';
+import { LocateFixed } from 'lucide-react';
 export interface OrderDetailsType {
   orderId: string;
   pickupAddress: string;
@@ -96,14 +96,14 @@ export const OrderDetails: React.FC<OrderDetailsProps> = ({ order }) => {
               ['Payment Method', order.paymentMethod],
               ['Delivery Fee', `₦${order.deliveryFee.toLocaleString()}`, order.deliveryFee > 0 && 'Completed'],
               ['Total', `₦${order.total.toLocaleString()}`],
-            ].map(([label, value, status]) => (
-              <div key={label} className="grid grid-cols-2 gap-4">
-                <span className="text-gray-600">{label}</span>
+            ].map((item,index) => (
+              <div key={index} className="grid grid-cols-2 gap-4">
+                <span className="text-gray-600">{item[0]}</span>
                 <div className="flex items-center gap-2">
-                  <span>{value}</span>
-                  {status && (
+                  <span>{item[1]}</span>
+                  {item[2] && (
                     <span className="px-2 py-1 text-xs bg-green-100 text-green-700 rounded">
-                      {status}
+                      {item[2]}
                     </span>
                   )}
                 </div>

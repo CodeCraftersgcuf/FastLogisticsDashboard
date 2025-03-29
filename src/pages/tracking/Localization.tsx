@@ -18,7 +18,7 @@ interface Location {
     other: string;
 }
 
-const Localization = () => {
+const Localization: React.FC = () => {
     const navigate = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editData, setEditData] = useState<Location | null>(null);
@@ -103,9 +103,11 @@ const Localization = () => {
                 <TableCan
                     dataTr={locations}
                     headerTr={['country', 'state', 'other']}
-                    TrName={(props) =>
-                        <LocalizationRow {...props} onEdit={handleEditLocation} onDelete={handleDeleteLocation} />
-                    }
+                    TrName={LocalizationRow}
+                    TrPropsName={{
+                        onEdit: { handleEditLocation },
+                        onDelete: { handleDeleteLocation }
+                    }}
                 />
             </div>
 

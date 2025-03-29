@@ -31,15 +31,15 @@ const validationSchema = Yup.object().shape({
     .required('Message is required'),
   location: Yup.string()
     .required('Location is required'),
-  image: Yup.mixed()
-    .test('fileSize', 'File is too large', (value : any ) => {
-      if (!value) return true;
+  profilePicture: Yup.mixed()
+    .test('fileSize', 'File too large', (value) => {
+      if (!value || !(value instanceof File)) return true;
       return value.size <= 5000000; // 5MB
     })
-    .test('fileType', 'Unsupported file type', (value) => {
-      if (!value) return true;
-      return ['image/jpeg', 'image/png', 'image/gif'].includes(value.type);
-    })
+    .test('fileFormat', 'Unsupported format', (value) => {
+      if (!value || !(value instanceof File)) return true;
+      return ['image/jpg', 'image/jpeg', 'image/png'].includes(value.type);
+    }),
 });
 
 

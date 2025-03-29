@@ -9,9 +9,9 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "type-check": "tsc --noEmit"
-
   },
   "dependencies": {
+    "@react-google-maps/api": "^2.20.6",
     "@tailwindcss/postcss": "^4.0.8",
     "@tailwindcss/vite": "^4.0.8",
     "bootstrap-icons": "^1.11.3",

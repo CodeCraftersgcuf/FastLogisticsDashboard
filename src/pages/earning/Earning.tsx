@@ -9,14 +9,14 @@ import { bulkOptions, DateDropOptions } from "../../components/FilterData";
 import TableCan from "../../components/TableCan";
 import EarningRow from "./component/EarningRow";
 
-const Earning = () => {
+const Earning  : React.FC = () => {
   const [filteredData, setFilteredData] = useState(getRating);
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState<string>("");
+  // const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  // const [searchQuery, setSearchQuery] = useState<string>("");
 
   // 🔹 Date Filter
   const handleDateFilter = (selectedOption: string) => {
-    setSelectedDate(selectedOption);
+    // setSelectedDate(selectedOption);
     
     const daysAgo = DateDropOptions.find(option => option.value === selectedOption)?.value;
 
@@ -33,7 +33,7 @@ const Earning = () => {
 
   // 🔹 Search Filter
   const handleSearch = (query: string) => {
-    setSearchQuery(query);
+    // setSearchQuery(query);
     setFilteredData(
       getRating.filter(
         item =>

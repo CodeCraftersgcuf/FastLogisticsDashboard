@@ -1,5 +1,5 @@
 import React from 'react'
-import { dummyImage, formatAmount, formatCreatedAt } from '../../../constants/help';
+import { dummyImage, formatCreatedAt } from '../../../constants/help';
 
 interface props {
     displayData: {

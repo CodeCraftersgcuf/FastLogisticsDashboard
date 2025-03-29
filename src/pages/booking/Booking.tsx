@@ -10,28 +10,29 @@ import Filter from "../../components/Filter";
 import TableCan from "../../components/TableCan";
 import BookingRow from "../transactions/component/BookingRow";
 
-const Booking = () => {
+const Booking : React.FC = () => {
   const [filteredBookings, setFilteredBookings] = useState(deliveryData);
   const [activeStatus, setActiveStatus] = useState('all');
-  const [selectedDateRange, setSelectedDateRange] = useState('9999'); // Default to "All time"
+  // const [selectedDateRange, setSelectedDateRange] = useState('9999'); // Default to "All time"
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleFilter = (selectedStatus: string) => {
     setActiveStatus(selectedStatus);
-    applyFilters(selectedStatus, selectedDateRange, searchQuery);
+    applyFilters(selectedStatus, searchQuery);
   };
 
   const handleDateFilter = (selectedRange: string) => {
-    setSelectedDateRange(selectedRange);
-    applyFilters(activeStatus, selectedRange, searchQuery);
+    // setSelectedDateRange(selectedRange);
+    applyFilters(activeStatus, searchQuery);
+    console.log(selectedRange)
   };
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
-    applyFilters(activeStatus, selectedDateRange, query);
+    applyFilters(activeStatus, query);
   };
 
-  const applyFilters = (status: string, dateRange: string, query: string) => {
+  const applyFilters = (status: string, query: string) => {
     let filteredData = deliveryData;
 
     // Filter by Status
@@ -105,7 +106,7 @@ const Booking = () => {
             "other"
           ]}
           dataTr={filteredBookings}
-          TrName={(props) => <BookingRow {...props} />}
+          TrName={BookingRow}
         />
       </div>
     </>

@@ -1,9 +1,8 @@
 import React from 'react';
 import { MetricBox } from './MetricBox';
-import { boxData } from '../../../constants/statisticsData';
 import images from '../../../constants/images';
 
-export const handleMetricClick = (id: string) => {
+export const handleMetricClick  = (id: string) => {
   console.log(`Metric clicked: ${id}`);
   // Add your click handling logic here
 };

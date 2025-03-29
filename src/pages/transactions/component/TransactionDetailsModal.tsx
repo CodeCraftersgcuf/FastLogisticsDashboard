@@ -121,7 +121,7 @@ const TransactionDetailsModal: React.FC<TransactionDetailsModalProps> = ({ isOpe
                                 {transaction.accountNumber || "N/A"}
                                 {transaction.accountNumber && (
                                     <button 
-                                        onClick={() => navigator.clipboard.writeText(transaction.accountNumber)}
+                                        onClick={() => navigator.clipboard.writeText('aksjdj212d')}
                                         className="text-gray-500 hover:text-gray-700"
                                     >
                                         <Copy size={16} />

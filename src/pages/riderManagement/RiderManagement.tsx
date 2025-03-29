@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 const RiderManagement : React.FC = () => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState('7'); // Default to "This week"
+  // const [selectedDate, setSelectedDate] = useState('7'); // Default to "This week"
   const [selectedRiderStatus, setSelectedRiderStatus] = useState('all');
   const [selectedTier, setSelectedTier] = useState('all');
   const [selectedOnlineStatus, setSelectedOnlineStatus] = useState('all');
@@ -36,7 +36,8 @@ const RiderManagement : React.FC = () => {
   }, [selectedRiderStatus, selectedTier, selectedOnlineStatus, searchQuery]);
 
   const handleDateChange = (value: string) => {
-    setSelectedDate(value);
+    // setSelectedDate(value);
+    console.log(value)
     // Here you would typically fetch data for the selected date range
   };
 

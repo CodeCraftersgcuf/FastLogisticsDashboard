@@ -2,7 +2,7 @@ import React from 'react'
 import { dummyImage, formatAmount } from '../../../constants/help';
 import Button from '../../../components/buttons/Button';
 import MoreDropdown from '../../../components/MoreDropdown';
-import { useNavigate, useNavigation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { AlertOctagon, AlertTriangle } from 'lucide-react';
 
 interface props {

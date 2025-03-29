@@ -1,4 +1,4 @@
-import React, {  useState } from "react";
+import React from "react";
 
 interface SearchFilterProps {
   Icon?: React.ElementType | null;
@@ -15,23 +15,17 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
   handleFunction = () => console.log("search button"),
   bgColor
 }) => {
-  const [searchTerm, setSearchTerm] = useState<string>("");
-
-  const handler = () => {
-    handleFunction(searchTerm);
-    console.log("click from search filter");
-  }
 
   return (
     <div className={`${bgColor || "bg-white"} border border-gray-300 relative py-[5px] px-2 rounded-lg ${className}`}>
       {Icon ? (
         <Icon className="text-2xl absolute top-1/2 left-3 transform -translate-y-1/2 block" />
       ) : (
-        <i onClick={handler} className="cursor-pointer bi bi-search text-base absolute top-1/2 left-3 transform -translate-y-1/2 block"></i>
+        <i className="cursor-pointer bi bi-search text-base absolute top-1/2 left-3 transform -translate-y-1/2 block"></i>
       )}
       <input
         type="text"
-        onKeyUp={(e) => handleFunction(e.target.value)}
+        onKeyUp={(e) => handleFunction((e.target as HTMLInputElement).value)}
         className={`ml-5 bg-transparent pl-2 text-base outline-none py-1 placeholder:text-gray-600 placeholder:text-base ${className}`}
         placeholder={Placeholder}
       />

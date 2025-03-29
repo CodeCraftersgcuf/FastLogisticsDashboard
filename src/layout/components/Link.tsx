@@ -28,10 +28,17 @@ const LinkComp: React.FC<LinkCompProps> = ({
 }) => {
   const location = useLocation();
   const [isActive, setIsActive] = useState<boolean>(isActiveCheck);
+  if (location.pathname.split('/')[1] == link.split('/')[1]) {
+    console.log("true")
+  }
 
   useEffect(() => {
     setIsActive(
-      location.pathname === link || sub.some((item) => location.pathname === item.link)
+      location.pathname.split('/')[1] == link.split('/')[1] ||
+      sub.some((item) =>
+        location.pathname === item.link ||
+        location.pathname.split('/')[1] === link.split('/')[1]
+      )
     );
   }, [location.pathname, link, sub]);
 

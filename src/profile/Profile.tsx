@@ -2,16 +2,14 @@ import React from 'react'
 import { useLocation } from 'react-router-dom'
 import ProfileHeader from './component/ProfileHeader';
 import UserProfile from './component/UserProfile';
-import HorizontalAlign from '../components/HorizontalAlign';
 import Dropdown from '../components/Dropdown';
 import { bulkOptions, onlineStatus } from '../components/FilterData';
 import ItemGap from '../components/ItemGap';
 import TableCan from '../components/TableCan';
-import UsersRow from '../pages/userManagement/components/UsersRow';
 import { userActivities } from '../constants/statisticsData';
 import ActivityRow from './component/ActivityRow';
 
-const Profile = () => {
+const Profile : React.FC = () => {
   const url = useLocation();
   console.log(url);
   const handleDetailsClick = (e: any) => {

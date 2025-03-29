@@ -9,7 +9,7 @@ import SearchFilter from "../../components/SearchFilter";
 import { MapPin } from "lucide-react";
 import MapContainer from "../../components/MapContainer";
 
-const Tracking = () => {
+const Tracking : React.FC = () => {
   const navigate = useNavigate();
   const tabs = [
     { value: "/tracking&location", name: "Live location" },

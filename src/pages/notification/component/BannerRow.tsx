@@ -1,7 +1,7 @@
 import React from 'react'
 import { dummyImage,  formatCreatedAt } from '../../../constants/help';
-import Button from '../../../components/buttons/Button';
-import { useNavigate, useNavigation } from 'react-router-dom';
+// import Button from '../../../components/buttons/Button';
+// import { useNavigate, useNavigation } from 'react-router-dom';
 import images from '../../../constants/images';
 
 interface props {
@@ -17,7 +17,7 @@ interface props {
 
 
 const BannerRow: React.FC<props> = ({ displayData,onDelete,onEdit }) => {
-    const navigate =  useNavigate();
+    // const navigate =  useNavigate();
     return (
         <tr className="hover:bg-gray-100 transition cursor-pointer relative"> {/* Removed border-b */}
             <td className="p-2 px-4 w-10">

@@ -1,30 +1,19 @@
 import React, { useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import HorizontalAlign from '../../components/HorizontalAlign';
 import ItemGap from '../../components/ItemGap';
 import Filter from '../../components/Filter';
 import Dropdown from '../../components/Dropdown';
 import { bulkOptions, DateDropOptions, rolestabs, transactionstatus, typeOptions } from '../../components/FilterData';
 import StatCard from '../../components/StatCard';
-import { deliveryData, transactions, transactionsData, userStatic } from '../../constants/statisticsData';
+import {  transactions, transactionsData } from '../../constants/statisticsData';
 import SearchFilter from '../../components/SearchFilter';
 import TableCan from '../../components/TableCan';
 import TransactionsRow from './component/TransactionsRow';
 
-interface TransactionData {
-  id: number;
-  username: string;
-  profile_picture: string;
-  role: 'user' | 'rider';
-  amount: number;
-  date: string;
-  status: 'pending' | 'success' | 'failed';
-  payment_method: string;
-  transactionId: string;
-}
 
-const Transaction = () => {
-  const navigate = useNavigate();
+const Transaction : React.FC = () => {
+  // const navigate = useNavigate();
   const [activeRole, setActiveRole] = useState('All');
   const [activeType, setActiveType] = useState('All');
   const [activeStatus, setActiveStatus] = useState('All');
@@ -32,7 +21,7 @@ const Transaction = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredTransactions = useMemo(() => {
-    return transactionsData.filter((transaction: TransactionData) => {
+    return transactionsData.filter((transaction: any) => {
       // Role filter
       if (activeRole !== 'All' && transaction.role.toLowerCase() !== activeRole.toLowerCase()) {
         return false;
@@ -154,7 +143,7 @@ const Transaction = () => {
           showHeading={true}
           headerTr={['name', 'transaction id', 'amount', 'status', 'payment method', 'Date&Time', 'other']}
           dataTr={filteredTransactions}
-          TrName={(props) => <TransactionsRow {...props} />}
+          TrName={TransactionsRow}
         />
       </div>
     </>

@@ -4,7 +4,7 @@ import HorizontalAlign from '../../../components/HorizontalAlign';
 import Button from '../../../components/buttons/Button';
 import MapContainer from '../../../components/MapContainer';
 
-const BookingDetail = () => {
+const BookingDetail : React.FC = () => {
   const sampleOrder: OrderDetailsType = {
     orderId: 'ORD-12345678',
     pickupAddress: 'No 1, abcdfeff street, ibadan, Oyo State',

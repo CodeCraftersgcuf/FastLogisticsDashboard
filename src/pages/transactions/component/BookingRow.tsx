@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { formatAmount, formatCreatedAt } from '../../../constants/help';
 import Button from '../../../components/buttons/Button';
 import { LocateFixed } from 'lucide-react';

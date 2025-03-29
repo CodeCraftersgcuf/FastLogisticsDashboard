@@ -12,13 +12,13 @@ import { notificationStatics } from '../../constants/statisticsData';
 import NotificationModal, { NotificationFormValues } from './component/NotificationModal';
 import DeleteConfirmationModal from './component/DeleteConfirmationModal';
 
-const Notification = () => {
+const Notification: React.FC = () => {
   const navigate = useNavigate();
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedNotification, setSelectedNotification] = useState<NotificationFormValues | null>(null);
   const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
-  
+
   // New state for filtering
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedPeriod, setSelectedPeriod] = useState('9999'); // Default to 'All time'
@@ -31,8 +31,8 @@ const Notification = () => {
       return notificationStatics.filter(notification => {
         // Search filter
         const matchesSearch = notification.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                            notification.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                            notification.location.toLowerCase().includes(searchTerm.toLowerCase());
+          notification.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          notification.location.toLowerCase().includes(searchTerm.toLowerCase());
 
         // Period filter
         const notificationDate = new Date(notification.created_at);
@@ -50,8 +50,8 @@ const Notification = () => {
     setSearchTerm(searchTerm);
   };
 
-  const handlePeriodChange = (period: { name: string; value: string }) => {
-    setSelectedPeriod(period.value);
+  const handlePeriodChange = (period: any) => {
+    setSelectedPeriod(period);
   };
 
   const handleNotificationSubmit = (values: NotificationFormValues) => {
@@ -112,7 +112,7 @@ const Notification = () => {
             />
             <Dropdown
               options={bulkOptions}
-              onChange={() => {}}
+              onChange={() => { }}
               placeholder="Bulk Actions"
               position="left-0"
             />
@@ -134,7 +134,11 @@ const Notification = () => {
           showHeading={true}
           headerTr={['Notification', 'Image', 'Location', 'Date', 'Actions']}
           dataTr={filteredNotifications}
-          TrName={(props) => <NotificationRow {...props} onEdit={handleEdit} onDelete={handleDelete} />}
+          TrName={NotificationRow}
+          TrPropsName={{
+            onEdit: { handleEdit },
+            onDelete: { handleDelete }
+          }}
         />
       </div>
 

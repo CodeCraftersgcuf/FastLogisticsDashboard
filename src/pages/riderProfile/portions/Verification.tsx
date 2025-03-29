@@ -3,7 +3,7 @@ import ProfileHeader from '../component/ProfileHeader'
 import RiderProfile from '../component/RiderProfile';
 import DocumentViewer from '../component/DocumentViewer';
 
-const Verification = () => {
+const Verification : React.FC = () => {
     const handleDetailsClick = (e: any) => {
         console.log(e.target.value);
     }

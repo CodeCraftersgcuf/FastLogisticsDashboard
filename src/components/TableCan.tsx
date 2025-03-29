@@ -6,7 +6,7 @@ interface TableCanProps<T> {
     ButtonLink?: string;
     headerTr: string[];
     dataTr: T[];
-    TrName: React.ComponentType<any> | ((props: any) => JSX.Element);
+    TrName: React.ComponentType<any>;
     showHeading?: boolean;
     TrPropsName?: Record<string, any>;
 }

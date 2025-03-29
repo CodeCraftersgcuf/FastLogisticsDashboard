@@ -5,7 +5,7 @@ import RideStatisticsChart from '../../dashboard/components/RideStatisticsChart'
 import { BoxContainer } from '../component/BoxContainer'
 import { orderMetricsData } from '../../../constants/statisticsData'
 
-const OrderMetrics = () => {
+const OrderMetrics  : React.FC = () => {
   return (
     <div className='flex flex-col gap-6 p-6'>
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6">
