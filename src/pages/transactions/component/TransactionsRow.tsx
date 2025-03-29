@@ -17,10 +17,9 @@ interface props {
         transactionId: string;
         type?:string;
     };
-    index: number;
 }
 
-const TransactionsRow: React.FC<props> = ({ displayData, index }) => {
+const TransactionsRow: React.FC<props> = ({ displayData }) => {
     const [showModal, setShowModal] = useState(false);
 
     return (

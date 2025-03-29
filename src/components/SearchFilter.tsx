@@ -31,7 +31,7 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
       )}
       <input
         type="text"
-        onChange={(e) => setSearchTerm(e.target.value)}
+        onKeyUp={(e) => handleFunction(e.target.value)}
         className={`ml-5 bg-transparent pl-2 text-base outline-none py-1 placeholder:text-gray-600 placeholder:text-base ${className}`}
         placeholder={Placeholder}
       />

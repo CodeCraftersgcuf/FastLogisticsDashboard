@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import SettingHeader from "../component/SettingHeader";
 import { adminStatics, adminUsers } from "../../../constants/statisticsData";
 import StatCard from "../../../components/StatCard";
@@ -9,22 +9,38 @@ import ItemGap from "../../../components/ItemGap";
 import Button from "../../../components/buttons/Button";
 import SearchFilter from "../../../components/SearchFilter";
 import TableCan from "../../../components/TableCan";
-import UsersRow from "../../userManagement/components/UsersRow";
 import AdminRow from "../component/AdminRow";
 import AddAdminModal from "../component/AddAdminModal";
 import { useNavigate } from "react-router-dom";
 
 const AdminManagement = () => {
     const navigate = useNavigate();
-    const handleDetailsClick = (e) => {
-        console.log("Status selected:", e.target.value);
-    };
+    const [selectedStatus, setSelectedStatus] = useState('all');
+    const [searchQuery, setSearchQuery] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    // Filter users based on status and search query
+    const filteredUsers = useMemo(() => {
+        return adminUsers.filter(user => {
+            const matchesStatus = selectedStatus === 'all' || user.status.toLowerCase() === selectedStatus.toLowerCase();
+            const matchesSearch = user.username.toLowerCase().includes(searchQuery.toLowerCase());
+            return matchesStatus && matchesSearch;
+        });
+    }, [selectedStatus, searchQuery]);
+
+    const handleStatusChange = (status: string) => {
+        setSelectedStatus(status);
+    };
+
+    const handleSearch = (query: string) => {
+        setSearchQuery(query);
+    };
 
     const handleAddAdmin = (values: any) => {
         console.log('New admin values:', values);
         setIsModalOpen(false);
     };
+
     return (
         <>
             <SettingHeader url={'Admin Management'} />
@@ -38,9 +54,10 @@ const AdminManagement = () => {
                 <HorizontalAlign>
                     <Dropdown
                         options={onlineStatus}
-                        onChange={handleDetailsClick}
+                        onChange={handleStatusChange}
                         placeholder="Status"
                         position="left-0"
+                        value={selectedStatus}
                     />
                     <ItemGap>
                         <Button handleFunction={() => setIsModalOpen(true)}>
@@ -49,14 +66,14 @@ const AdminManagement = () => {
                         <Button handleFunction={() => navigate('/settings/admin/management')}>
                             Role Management
                         </Button>
-                        <SearchFilter />
+                        <SearchFilter handleFunction={handleSearch} value={searchQuery} />
                     </ItemGap>
                 </HorizontalAlign>
                 <TableCan
                     heading="Users"
                     showHeading={true}
                     headerTr={['Username', 'Role', 'date joined', 'status', 'actions']}
-                    dataTr={adminUsers}
+                    dataTr={filteredUsers}
                     TrName={AdminRow}
                 />
                 <AddAdminModal

@@ -3,6 +3,7 @@ import { dummyImage, formatAmount } from '../../../constants/help';
 import Button from '../../../components/buttons/Button';
 import MoreDropdown from '../../../components/MoreDropdown';
 import { useNavigate } from 'react-router-dom';
+import { AlertOctagon, AlertTriangle } from 'lucide-react';
 
 interface props {
     displayData: {
@@ -16,11 +17,10 @@ interface props {
         status: string;
         verify: string;
     };
-    index: number;
 }
 
 
-const RiderRow: React.FC<props> = ({ displayData, index }) => {
+const RiderRow: React.FC<props> = ({ displayData }) => {
     const navigate = useNavigate();
     const radius = 18;
     const circumference = 2 * Math.PI * radius;
@@ -88,9 +88,18 @@ const RiderRow: React.FC<props> = ({ displayData, index }) => {
             <td className='p-2'>
                 <MoreDropdown
                     iconClass="bi bi-three-dots-vertical"
-                    menuClass="bg-theme-dark min-w-[300px]"
+                    menuClass="bg-theme-dark min-w-[150px] bg-white"
                 >
-                    hamza
+                    <div className='flex flex-col gap-2'>
+                        <button className='flex gap-2 items-center capitalize font-medium py-4 px-3 w-[150px] hover:bg-black/10 cursor-pointer'>
+                            <AlertTriangle size={20} color='black' />
+                            Block Rider
+                        </button>
+                        <button className='flex gap-2 text-red-500 items-center capitalize font-medium py-4 px-3 w-[150px] hover:bg-black/10 cursor-pointer'>
+                            <AlertOctagon size={20} color='red' />
+                            Delete Rider
+                        </button>
+                    </div>
                 </MoreDropdown>
             </td>
         </tr>

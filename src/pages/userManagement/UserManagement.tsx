@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import Dropdown from "../../components/Dropdown";
 import HorizontalAlign from "../../components/HorizontalAlign";
 import { bulkOptions, DateDropOptions, onlineStatus } from "../../components/FilterData";
@@ -11,16 +11,45 @@ import TableCan from "../../components/TableCan";
 import UsersRow from "./components/UsersRow";
 import AddUserModal from "./components/AddUserModal";
 
-const UserManagement = () => {
+const UserManagement : React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState('7'); // Default to "This week"
+  const [selectedStatus, setSelectedStatus] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const handleDetailsClick = (booking: any) => {
-    console.log("View details for:", booking);
+  // Filter users based on status and search query
+  const filteredUsers = useMemo(() => {
+    return userTableStatic.filter(user => {
+      const matchesStatus = selectedStatus === 'all' || user.status.toLowerCase() === selectedStatus.toLowerCase();
+      const matchesSearch = 
+        user.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        user.phone.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchesStatus && matchesSearch;
+    });
+  }, [selectedStatus, searchQuery]);
+
+  const handleDateChange = (value: string) => {
+    setSelectedDate(value);
+    // Here you would typically fetch data for the selected date range
+  };
+
+  const handleStatusChange = (status: string) => {
+    setSelectedStatus(status);
+  };
+
+  const handleBulkAction = (action: string) => {
+    console.log("Bulk action selected:", action);
+    // Implement bulk actions here
+  };
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
   };
 
   const handleAddUser = (values: any) => {
     console.log("New user data:", values);
-    // Handle the new user data here (e.g., API call)
+    setIsModalOpen(false);
   };
 
   return (
@@ -31,7 +60,7 @@ const UserManagement = () => {
           <div className="px-6">
             <Dropdown
               options={DateDropOptions}
-              onChange={handleDetailsClick}
+              onChange={handleDateChange}
               placeholder="This Week"
               position="right-0"
             />
@@ -48,13 +77,13 @@ const UserManagement = () => {
           <ItemGap>
             <Dropdown
               options={onlineStatus}
-              onChange={handleDetailsClick}
+              onChange={handleStatusChange}
               placeholder="Status"
               position="left-0"
             />
             <Dropdown
               options={bulkOptions}
-              onChange={handleDetailsClick}
+              onChange={handleBulkAction}
               placeholder="Bulk Actions"
               position="left-0"
             />
@@ -63,7 +92,7 @@ const UserManagement = () => {
             <Button handleFunction={() => setIsModalOpen(true)}>
               Add New User
             </Button>
-            <SearchFilter/>
+            <SearchFilter handleFunction={handleSearch} />
           </ItemGap>
         </HorizontalAlign>
 
@@ -71,7 +100,7 @@ const UserManagement = () => {
           heading="Users"
           showHeading={true}
           headerTr={['Username','Email','Phone No','Wallet Balance','Status','Actions','Other']}
-          dataTr={userTableStatic}
+          dataTr={filteredUsers}
           TrName={UsersRow}
         />
 

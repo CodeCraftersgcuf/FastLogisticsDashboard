@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import ProfileHeader from '../component/ProfileHeader'
 import BookingRow from '../../transactions/component/BookingRow';
 import TableCan from '../../../components/TableCan';
@@ -11,53 +11,61 @@ import SearchFilter from '../../../components/SearchFilter';
 import StatCard from '../../../components/StatCard';
 import { BookingsStats, deliveryData } from '../../../constants/statisticsData';
 
-const RiderBooking = () => {
-    const handleDetailsClick = (e: any) => {
-        console.log(e.target.value);
-    }
-    const [filteredBookings, setFilteredBookings] = useState(deliveryData);
-    const [activeStatus, setActiveStatus] = useState('All');
-    const [selectedDateRange, setSelectedDateRange] = useState('9999'); // Default to "All time"
-    const [searchQuery, setSearchQuery] = useState("");
+const RiderBooking : React.FC = () => {
+    const [activeStatus, setActiveStatus] = useState('all');
+    const [selectedDateRange, setSelectedDateRange] = useState('9999');
+    const [searchQuery, setSearchQuery] = useState('');
 
-    const handleFilter = (selectedStatus: string) => {
-        setActiveStatus(selectedStatus);
-        applyFilters(selectedStatus, selectedDateRange, searchQuery);
+    // Use useMemo to compute filtered bookings
+    const filteredBookings = useMemo(() => {
+        return deliveryData.filter(booking => {
+            // Status filter
+            const matchesStatus = 
+                activeStatus.toLowerCase() === 'all' || 
+                booking.status.toLowerCase() === activeStatus.toLowerCase();
+
+            // Search filter
+            const searchLower = searchQuery.toLowerCase();
+            const matchesSearch = searchQuery === '' || (
+                (booking.username?.toLowerCase().includes(searchLower)) ||
+                (booking.rider_name?.toLowerCase().includes(searchLower)) ||
+                (booking.orderId?.toLowerCase().includes(searchLower))
+            );
+
+            // Date range filter
+            const matchesDate = selectedDateRange === '9999' || (
+                booking.pickup_date && (() => {
+                    const bookingDate = new Date(booking.pickup_date).getTime();
+                    const now = new Date().getTime();
+                    const daysAgo = (now - bookingDate) / (1000 * 60 * 60 * 24);
+                    return daysAgo <= parseInt(selectedDateRange);
+                })()
+            );
+
+            return matchesStatus && matchesSearch && matchesDate;
+        });
+    }, [activeStatus, searchQuery, selectedDateRange]);
+
+    const handleFilter = (status: string) => {
+        setActiveStatus(status.toLowerCase());
     };
 
-    const handleDateFilter = (selectedRange: string) => {
-        setSelectedDateRange(selectedRange);
-        applyFilters(activeStatus, selectedRange, searchQuery);
+    const handleDateFilter = (range: string) => {
+        setSelectedDateRange(range);
     };
 
     const handleSearch = (query: string) => {
         setSearchQuery(query);
-        applyFilters(activeStatus, selectedDateRange, query);
     };
 
-    const applyFilters = (status: string, dateRange: string, query: string) => {
-        let filteredData = deliveryData;
-
-        // Filter by Status
-        if (status !== "all") {
-            filteredData = filteredData.filter(order => order.status.toLowerCase() === status.toLowerCase());
-        }
-
-        // Filter by Search Query
-        if (query) {
-            filteredData = filteredData.filter(order =>
-                order.username.toLowerCase().includes(query.toLowerCase()) ||
-                order.rider_name?.toLowerCase().includes(query.toLowerCase()) ||
-                order.orderId.toLowerCase().includes(query.toLowerCase())
-            );
-        }
-
-        // Apply filtered data
-        setFilteredBookings(filteredData);
+    const handleBulkAction = (action: string) => {
+        console.log('Bulk action:', action);
+        // Implement bulk actions here
     };
+
     return (
         <>
-            <ProfileHeader url='bookings' handlePeriod={handleDetailsClick} />
+            <ProfileHeader url='bookings' handlePeriod={(e) => console.log(e)} />
             <div className="p-6 flex flex-col gap-4">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {BookingsStats.map((stat, index) => (
@@ -77,15 +85,19 @@ const RiderBooking = () => {
                             onChange={handleDateFilter}
                             placeholder="Period"
                             position="right-0"
+                            value={selectedDateRange}
                         />
                         <Dropdown
                             options={bulkOptions}
-                            onChange={(value: string) => console.log('Bulk action:', value)}
+                            onChange={handleBulkAction}
                             placeholder="Bulk Actions"
                             position="right-0"
                         />
                     </ItemGap>
-                    <SearchFilter handleFunction={(e) => handleSearch(e)} />
+                    <SearchFilter 
+                        handleFunction={handleSearch}
+                        value={searchQuery}
+                    />
                 </HorizontalAlign>
 
                 <TableCan
@@ -103,11 +115,10 @@ const RiderBooking = () => {
                         "other"
                     ]}
                     dataTr={filteredBookings}
-                    TrName={(props) => <BookingRow {...props} />}
+                    TrName={BookingRow}
                 />
             </div>
         </>
-
     )
 }
 

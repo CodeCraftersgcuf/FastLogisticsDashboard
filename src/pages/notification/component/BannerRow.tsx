@@ -13,11 +13,10 @@ interface props {
     };
     onDelete?: (del :any )=>void;
     onEdit?: (edit :any )=>void;
-    index: number;
 }
 
 
-const BannerRow: React.FC<props> = ({ displayData, index,onDelete,onEdit }) => {
+const BannerRow: React.FC<props> = ({ displayData,onDelete,onEdit }) => {
     const navigate =  useNavigate();
     return (
         <tr className="hover:bg-gray-100 transition cursor-pointer relative"> {/* Removed border-b */}

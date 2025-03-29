@@ -20,11 +20,10 @@ interface props {
         rider_earning?:number | string;
         total_earn?:number | string;
     };
-    index: number;
 }
 
 
-const EarningRow: React.FC<props> = ({ displayData, index }) => {
+const EarningRow: React.FC<props> = ({ displayData }) => {
 
 
 

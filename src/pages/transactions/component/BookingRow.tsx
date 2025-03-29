@@ -20,11 +20,10 @@ interface props {
     status: 'active'|'completed'|'scheduled';
     orderId:string;
   };
-  index: number;
 }
 
-const BookingRow: React.FC<props> = ({ displayData, index }) => {
-  const [showModal, setShowModal] = useState(false);
+const BookingRow: React.FC<props> = ({ displayData }) => {
+  // const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate()
 
   return (
