@@ -12,7 +12,7 @@ import { BannerStatics } from "../../constants/statisticsData";
 import BannerModal from "./component/BannerModal";
 import DeleteConfirmationModal from "./component/DeleteConfirmationModal";
 
-const InAppBanner = () => {
+const InAppBanner: React.FC = () => {
   const navigate = useNavigate();
   const [isBannerModalOpen, setBannerModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -45,8 +45,8 @@ const InAppBanner = () => {
     setSearchTerm(term);
   };
 
-  const handlePeriodChange = (period: { name: string; value: string }) => {
-    setSelectedPeriod(period.value);
+  const handlePeriodChange = (period: any) => {
+    setSelectedPeriod(period);
   };
 
   const handleBannerSubmit = (values: any) => {
@@ -99,17 +99,17 @@ const InAppBanner = () => {
       <div className="flex flex-col gap-6 p-6">
         <HorizontalAlign>
           <ItemGap>
-            <Dropdown 
-              options={DateDropOptions} 
-              onChange={(e) => handlePeriodChange(e)} 
-              placeholder="Period" 
+            <Dropdown
+              options={DateDropOptions}
+              onChange={(e) => handlePeriodChange(e)}
+              placeholder="Period"
               position="left-0"
             />
-            <Dropdown 
-              options={bulkOptions} 
-              onChange={() => {}} 
-              placeholder="Bulk Actions" 
-              position="left-0" 
+            <Dropdown
+              options={bulkOptions}
+              onChange={() => { }}
+              placeholder="Bulk Actions"
+              position="left-0"
             />
           </ItemGap>
           <ItemGap>
@@ -130,13 +130,17 @@ const InAppBanner = () => {
           showHeading={true}
           headerTr={['Banner image', 'Location', 'Date', 'Actions']}
           dataTr={filteredBanners}
-          TrName={(props) => (
-            <BannerRow 
-              {...props} 
-              onEdit={handleEdit} 
-              onDelete={handleDelete}
-            />
-          )}
+          TrName={BannerRow}
+          TrPropsName={{
+            onEdit: { handleEdit },
+            onDelete: { handleDelete }
+          }}
+        //   <BannerRow 
+        //     {...props} 
+        //     onEdit={handleEdit} 
+        //     onDelete={handleDelete}
+        //   />
+        // )}
         />
       </div>
 

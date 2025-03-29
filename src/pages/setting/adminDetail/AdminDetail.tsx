@@ -1,15 +1,14 @@
 import React from 'react'
 import SettingHeader from '../component/SettingHeader'
-import ProfileHeader from '../../../profile/component/ProfileHeader';
 import UserProfile from '../../../profile/component/UserProfile';
 import ItemGap from '../../../components/ItemGap';
 import Dropdown from '../../../components/Dropdown';
 import TableCan from '../../../components/TableCan';
 import ActivityRow from '../../../profile/component/ActivityRow';
 import { userActivities } from '../../../constants/statisticsData';
-import { bulkOptions, DateDropOptions, onlineStatus } from '../../../components/FilterData';
+import { bulkOptions, DateDropOptions } from '../../../components/FilterData';
 
-const AdminDetail = () => {
+const AdminDetail : React.FC = () => {
     const userData = {
         name: 'Qamardeen AbdulMalik',
         email: 'qamardeenola@gmail.com',
@@ -20,8 +19,8 @@ const AdminDetail = () => {
         walletBalance: 25000,
         status: 'online' as const,
     };
-    const handleDetailsClick = (e) => {
-        console.log(e.target.value);
+    const handleDetailsClick = (e : any) => {
+        console.log(e);
     }
 
     return (

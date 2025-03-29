@@ -32,11 +32,11 @@ const validationSchema = Yup.object().shape({
     .required('Password is required'),
   profilePicture: Yup.mixed()
     .test('fileSize', 'File too large', (value) => {
-      if (!value) return true;
+      if (!value || !(value instanceof File)) return true;
       return value.size <= 5000000; // 5MB
     })
     .test('fileFormat', 'Unsupported format', (value) => {
-      if (!value) return true;
+      if (!value || !(value instanceof File)) return true;
       return ['image/jpg', 'image/jpeg', 'image/png'].includes(value.type);
     }),
 });
@@ -93,14 +93,14 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ isOpen, onClose, onSubmit }
           {({ isSubmitting, setFieldValue }) => (
             <Form className="space-y-6">
               <div className="flex flex-col items-center mb-6">
-                <div 
+                <div
                   className="w-32 h-32 rounded-full bg-gray-200 mb-4 overflow-hidden cursor-pointer"
                   onClick={() => fileInputRef.current?.click()}
                 >
                   {previewImage ? (
-                    <img 
-                      src={previewImage} 
-                      alt="Profile preview" 
+                    <img
+                      src={previewImage}
+                      alt="Profile preview"
                       className="w-full h-full object-cover"
                     />
                   ) : (

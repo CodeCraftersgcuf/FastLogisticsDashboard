@@ -16,13 +16,6 @@ interface BannerFormData {
   location: string;
 }
 
-const locations = [
-  { id: 'home', label: 'Home Page' },
-  { id: 'dashboard', label: 'Dashboard' },
-  { id: 'profile', label: 'Profile Page' },
-  { id: 'settings', label: 'Settings Page' }
-];
-
 const BannerModal: React.FC<BannerModalProps> = ({
   isOpen,
   onClose,

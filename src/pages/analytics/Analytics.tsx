@@ -11,7 +11,7 @@ import MarketingMetrics from "./portions/MarketingMetrics";
 import TechnicalMetrics from "./portions/TechnicalMetrics";
 
 
-const Analytics = () => {
+const Analytics : React.FC = () => {
   const [activeTab, setActiveTab] = useState('user-metrics');
 
   useEffect(() => {

@@ -9,7 +9,7 @@ import TableCan from '../../components/TableCan';
 import { userActivities } from '../../constants/statisticsData';
 import { bulkOptions, onlineStatus } from '../../components/FilterData';
 
-const RiderProfile = () => {
+const RiderProfile : React.FC = () => {
   const url = useLocation();
   console.log(url);
   const handleDetailsClick = (e: any) => {

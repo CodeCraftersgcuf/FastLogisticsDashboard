@@ -8,7 +8,7 @@ interface Tab {
 interface FilterProps {
   tabs: Tab[];
   handleValue: (value: string) => void;
-  activeTab: string;
+  activeTab: string | undefined;
   tabPadding?: string;
 }
 

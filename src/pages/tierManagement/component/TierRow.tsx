@@ -1,6 +1,5 @@
 import React from 'react'
 import {formatCreatedAt } from '../../../constants/help';
-import { useNavigate } from 'react-router-dom';
 import images from '../../../constants/images';
 
 interface props {

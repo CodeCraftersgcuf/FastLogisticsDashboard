@@ -2,7 +2,7 @@ import React from "react";
 import SettingHeader from "./component/SettingHeader";
 import General from "./portions/General";
 
-const Setting = () => {
+const Setting  : React.FC = () => {
   const url ='General'
   return (
     <>

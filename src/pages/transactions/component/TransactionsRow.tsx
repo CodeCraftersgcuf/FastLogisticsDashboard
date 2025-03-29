@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { dummyImage, formatAmount, formatCreatedAt } from '../../../constants/help';
 import Button from '../../../components/buttons/Button';
-import { LocateFixed } from 'lucide-react';
 import TransactionDetailsModal from './TransactionDetailsModal';
 
 interface props {
@@ -16,6 +15,7 @@ interface props {
         payment_method: string;
         transactionId: string;
         type?:string;
+        txnType: string;
     };
 }
 

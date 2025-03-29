@@ -1,6 +1,5 @@
 import React from 'react';
 import images from '../../constants/images';
-import notificationIcon from '../../assets/icons/notification.svg'
 import MoreDropdown from '../../components/MoreDropdown';
 
 interface UserProfileProps {

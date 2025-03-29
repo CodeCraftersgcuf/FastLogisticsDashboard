@@ -11,7 +11,7 @@ type props = {
     onSelectChat: (user: any) => void;
 }
 
-const UserChat = ({
+const UserChat : React.FC<props> = ({
     UserId,
     UserImage = dummyImage(),
     UserName,
@@ -19,7 +19,7 @@ const UserChat = ({
     LastMessageTime,
     LastMessageCount,
     onSelectChat
-}: props) => {
+}) => {
 
 
     return (

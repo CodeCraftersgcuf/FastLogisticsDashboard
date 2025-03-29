@@ -13,7 +13,7 @@ import AdminRow from "../component/AdminRow";
 import AddAdminModal from "../component/AddAdminModal";
 import { useNavigate } from "react-router-dom";
 
-const AdminManagement = () => {
+const AdminManagement  : React.FC= () => {
     const navigate = useNavigate();
     const [selectedStatus, setSelectedStatus] = useState('all');
     const [searchQuery, setSearchQuery] = useState('');
@@ -57,7 +57,6 @@ const AdminManagement = () => {
                         onChange={handleStatusChange}
                         placeholder="Status"
                         position="left-0"
-                        value={selectedStatus}
                     />
                     <ItemGap>
                         <Button handleFunction={() => setIsModalOpen(true)}>
@@ -66,7 +65,7 @@ const AdminManagement = () => {
                         <Button handleFunction={() => navigate('/settings/admin/management')}>
                             Role Management
                         </Button>
-                        <SearchFilter handleFunction={handleSearch} value={searchQuery} />
+                        <SearchFilter handleFunction={handleSearch} />
                     </ItemGap>
                 </HorizontalAlign>
                 <TableCan

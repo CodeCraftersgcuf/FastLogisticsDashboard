@@ -12,7 +12,7 @@ const validationSchema = Yup.object({
   costPerMinVariable: Yup.string(),
 });
 
-const General = () => {
+const General  : React.FC = () => {
   return (
     <Formik
       initialValues={{

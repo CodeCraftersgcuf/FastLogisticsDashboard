@@ -10,25 +10,25 @@ import HorizontalAlign from '../../../components/HorizontalAlign';
 import StatCard from '../../../components/StatCard';
 import { transactions, transactionsData } from '../../../constants/statisticsData';
 import { bulkOptions, DateDropOptions, transactionstatus, typeOptions } from '../../../components/FilterData';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 
-const RiderTransactions = () => {
+const RiderTransactions : React.FC = () => {
     const handleDetailsClick = (e: any) => {
         console.log(e.target.value);
     }
-    const navigate = useNavigate();
-    const [activeRole, setActiveRole] = useState('All');
+    // const navigate = useNavigate();
+    // const [activeRole, setActiveRole] = useState('All');
     const [activeType, setActiveType] = useState('All');
     const [activeStatus, setActiveStatus] = useState('All');
     const [activePeriod, setActivePeriod] = useState('All');
     const [searchQuery, setSearchQuery] = useState('');
 
     const filteredTransactions = useMemo(() => {
-        return transactionsData.filter((transaction: TransactionData) => {
+        return transactionsData.filter((transaction: any) => {
             // Role filter
-            if (activeRole !== 'All' && transaction.role.toLowerCase() !== activeRole.toLowerCase()) {
-                return false;
-            }
+            // if (activeRole !== 'All' && transaction.role.toLowerCase() !== activeRole.toLowerCase()) {
+            //     return false;
+            // }
 
             // Type filter
             if (activeType !== 'All' && transaction.payment_method.toLowerCase() !== activeType.toLowerCase()) {
@@ -71,11 +71,11 @@ const RiderTransactions = () => {
 
             return true;
         });
-    }, [activeRole, activeType, activeStatus, activePeriod, searchQuery]);
-
-    const handleRoleFilter = (value: string) => {
-        setActiveRole(value);
-    };
+    }, [ activeType, activeStatus, activePeriod, searchQuery]);
+    // activeRole,
+    // const handleRoleFilter = (value: any) => {
+    //     setActiveRole(value);
+    // };
 
     const handleTypeFilter = (value: string) => {
         setActiveType(value);
@@ -134,7 +134,7 @@ const RiderTransactions = () => {
                     showHeading={true}
                     headerTr={['name', 'transaction id', 'amount', 'status', 'payment method', 'Date&Time', 'other']}
                     dataTr={filteredTransactions}
-                    TrName={(props) => <TransactionsRow {...props} />}
+                    TrName={TransactionsRow}
                 />
             </div>
         </>

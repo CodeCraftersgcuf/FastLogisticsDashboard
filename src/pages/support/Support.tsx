@@ -4,7 +4,7 @@ import UserChat from './components/UserChat';
 import SearchFilter from '../../components/SearchFilter';
 import ChatCan from './ChatComponents/ChatCan';
 
-const Support = () => {
+const Support : React.FC = () => {
     const [selectedUserChat, setselectedUserChat] = useState<any>()
 
     const chatsData = [

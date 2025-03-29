@@ -6,7 +6,7 @@ type props ={
     ProfileImg?:string;
 }
 
-const SupportHeader = ({username ,ProfileImg = dummyImage()}: props) => {
+const SupportHeader: React.FC<props> = ({username ,ProfileImg = dummyImage()}) => {
     return (
         <div className='flex p-4 items-center gap-2 shadow-sm shadow-gray-400 rounded-tr-lg'>
             <img src={ProfileImg} alt={username} className='w-14 h-14 rounded-full' />

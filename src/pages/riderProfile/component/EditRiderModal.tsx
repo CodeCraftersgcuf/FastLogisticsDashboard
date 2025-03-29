@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { X } from 'lucide-react';
-import { PersonalDetails, VehicleDetails, RiderProfileProps } from './RiderProfile';
+import { RiderProfileProps } from './RiderProfile';
 
 interface EditRiderModalProps {
   isOpen: boolean;

@@ -4,7 +4,7 @@ import SupportHeader from '../../support/components/SupportHeader';
 import { dummyImage } from '../../../constants/help';
 import ChatCan from '../../support/ChatComponents/ChatCan';
 
-const RiderChat = () => {
+const RiderChat  : React.FC= () => {
     const handleDetailsClick = (e: any) => {
         console.log(e.target.value);
     }

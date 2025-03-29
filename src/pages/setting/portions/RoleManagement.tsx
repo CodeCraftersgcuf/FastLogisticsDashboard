@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { Search, MoreVertical, Edit2, Trash2, ChevronRight } from 'lucide-react';
+import {  MoreVertical, Edit2, Trash2, ChevronRight } from 'lucide-react';
 import AddRoleModal from '../component/AddRoleModal';
 import SearchFilter from '../../../components/SearchFilter';
 import HorizontalAlign from '../../../components/HorizontalAlign';
-import ItemGap from '../../../components/ItemGap';
 
 interface Permission {
   id: string;
@@ -35,15 +34,15 @@ const mockRoles: Role[] = [
   { id: '2', name: 'Admin', permissions: ['dashboard', 'view'] },
   { id: '3', name: 'Super Admin', permissions: ['dashboard', 'create', 'update', 'delete'] },
 ];
-
-export default function RoleManagement() {
-  const [searchTerm, setSearchTerm] = useState('');
+const  RoleManagement : React.FC = ()=> {
+  // const [searchTerm, setSearchTerm] = useState('');
   const [isAddRoleModalOpen, setIsAddRoleModalOpen] = useState(false);
   const [roles, setRoles] = useState(mockRoles);
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
 
   const handleSearch = (value: string) => {
-    setSearchTerm(value);
+    // setSearchTerm(value);
+    console.log(value);
   };
 
   const handleAddRole = (newRole: { name: string; permissions: string[] }) => {
@@ -160,3 +159,5 @@ export default function RoleManagement() {
     </div>
   );
 }
+
+export default RoleManagement

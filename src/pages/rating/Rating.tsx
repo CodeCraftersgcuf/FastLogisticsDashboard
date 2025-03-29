@@ -8,14 +8,14 @@ import TableCan from "../../components/TableCan";
 import { getRating } from "../../constants/statisticsData";
 import RatingRow from "./components/RatingRow";
 
-const Rating = () => {
+const Rating  : React.FC= () => {
   const [filteredData, setFilteredData] = useState(getRating);
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState<string>("");
+  // const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  // const [searchQuery, setSearchQuery] = useState<string>("");
 
   // Handle Date Dropdown Filter
   const handleDateFilter = (selectedOption: string) => {
-    setSelectedDate(selectedOption);
+    // setSelectedDate(selectedOption);
 
     if (selectedOption === "Today") {
       const today = new Date().toISOString().split("T")[0];
@@ -31,7 +31,7 @@ const Rating = () => {
 
   // Handle Search Input
   const handleSearch = (query: string) => {
-    setSearchQuery(query);
+    // setSearchQuery(query);
 
     setFilteredData(
       getRating.filter(

@@ -13,7 +13,7 @@ import AddUserModal from "./components/AddUserModal";
 
 const UserManagement : React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState('7'); // Default to "This week"
+  // const [selectedDate, setSelectedDate] = useState('7'); // Default to "This week"
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -30,7 +30,8 @@ const UserManagement : React.FC = () => {
   }, [selectedStatus, searchQuery]);
 
   const handleDateChange = (value: string) => {
-    setSelectedDate(value);
+    // setSelectedDate(value);
+    console.log(value)
     // Here you would typically fetch data for the selected date range
   };
 

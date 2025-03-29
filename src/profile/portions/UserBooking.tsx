@@ -40,8 +40,8 @@ const UserBooking : React.FC = () => {
 
             return matchesStatus && matchesSearch; // && matchesDate;
         });
-    }, [activeStatus, searchQuery, selectedDateRange]);
-
+    }, [activeStatus,  selectedDateRange]);
+    // searchQuery,
     const handleFilter = (status: string) => {
         setActiveStatus(status.toLowerCase());
     };
@@ -81,7 +81,6 @@ const UserBooking : React.FC = () => {
                             onChange={handleDateFilter}
                             placeholder="Period"
                             position="right-0"
-                            value={selectedDateRange}
                         />
                         <Dropdown
                             options={bulkOptions}
@@ -92,7 +91,6 @@ const UserBooking : React.FC = () => {
                     </ItemGap>
                     <SearchFilter 
                         handleFunction={handleSearch}
-                        value={searchQuery}
                     />
                 </HorizontalAlign>
 

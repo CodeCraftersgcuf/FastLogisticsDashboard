@@ -3,8 +3,8 @@ import images from '../../../constants/images'
 import SiteStatisticsChart from '../../dashboard/components/SiteStatisticsChart'
 import RideStatisticsChart from '../../dashboard/components/RideStatisticsChart'
 import { BoxContainer } from '../component/BoxContainer'
-import { boxData, BoxData } from '../../../constants/statisticsData'
-const UserMetrics = () => {
+import { boxData } from '../../../constants/statisticsData'
+const UserMetrics : React.FC = () => {
   return (
     <div className='flex flex-col gap-6 p-6'>
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6">

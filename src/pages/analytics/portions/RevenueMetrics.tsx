@@ -4,7 +4,7 @@ import SiteStatisticsChart from '../../dashboard/components/SiteStatisticsChart'
 import { BoxContainer } from '../component/BoxContainer'
 import { revenueMetricsData } from '../../../constants/statisticsData'
 
-const RevenueMetrics = () => {
+const RevenueMetrics  : React.FC= () => {
   return (
     <div className='flex flex-col gap-6 p-6'>
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6">

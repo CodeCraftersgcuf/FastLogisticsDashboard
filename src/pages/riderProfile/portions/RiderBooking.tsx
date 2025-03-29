@@ -34,8 +34,8 @@ const RiderBooking : React.FC = () => {
 
             // Date range filter
             const matchesDate = selectedDateRange === '9999' || (
-                booking.pickup_date && (() => {
-                    const bookingDate = new Date(booking.pickup_date).getTime();
+                booking.pickdate && (() => {
+                    const bookingDate = new Date(booking.pickdate).getTime();
                     const now = new Date().getTime();
                     const daysAgo = (now - bookingDate) / (1000 * 60 * 60 * 24);
                     return daysAgo <= parseInt(selectedDateRange);
@@ -85,7 +85,6 @@ const RiderBooking : React.FC = () => {
                             onChange={handleDateFilter}
                             placeholder="Period"
                             position="right-0"
-                            value={selectedDateRange}
                         />
                         <Dropdown
                             options={bulkOptions}
@@ -96,7 +95,6 @@ const RiderBooking : React.FC = () => {
                     </ItemGap>
                     <SearchFilter 
                         handleFunction={handleSearch}
-                        value={searchQuery}
                     />
                 </HorizontalAlign>
 
