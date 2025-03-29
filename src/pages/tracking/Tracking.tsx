@@ -7,6 +7,7 @@ import Dropdown from "../../components/Dropdown";
 import { onlineStatus } from "../../components/FilterData";
 import SearchFilter from "../../components/SearchFilter";
 import { MapPin } from "lucide-react";
+import MapContainer from "../../components/MapContainer";
 
 const Tracking = () => {
   const navigate = useNavigate();
@@ -45,10 +46,10 @@ const Tracking = () => {
           />
           <SearchFilter />
         </HorizontalAlign>
-
-        <div className="rounded-md bg-white border border-gray-300 w-full h-[60vh] flex items-center justify-center">
-          Maps Holder
-        </div>
+        <MapContainer
+                origin={{ lat: 40.719526, lng: -73.952255 }} // example: McCarren Park
+                destination={{ lat: 40.744679, lng: -73.948542 }} // example: LaGuardia Community College
+              />
         <div className="flex items-center gap-6 p-4 bg-white shadow-md shadow-gray-400 rounded-md">
           <div className="flex items-center gap-1">
             <MapPin size={25} fill="purple" color="white" />

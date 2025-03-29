@@ -2,6 +2,7 @@ import React from 'react'
 import { OrderDetails, OrderDetailsType } from './OrderDetails';
 import HorizontalAlign from '../../../components/HorizontalAlign';
 import Button from '../../../components/buttons/Button';
+import MapContainer from '../../../components/MapContainer';
 
 const BookingDetail = () => {
   const sampleOrder: OrderDetailsType = {
@@ -37,9 +38,10 @@ const BookingDetail = () => {
           <OrderDetails order={sampleOrder} />
           <div className='relative '>
             <div className='sticky top-10 space-y-2'>
-              <div className='w-full h-[50vh] bg-gray-400 flex items-center justify-center mb-4 rounded-md'>
-                map container
-              </div>
+              <MapContainer
+                origin={{ lat: 40.719526, lng: -73.952255 }} // example: McCarren Park
+                destination={{ lat: 40.744679, lng: -73.948542 }} // example: LaGuardia Community College
+              />
               <Button>
                 View Chat
               </Button>
