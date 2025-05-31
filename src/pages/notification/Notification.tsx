@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import HorizontalAlign from '../../components/HorizontalAlign';
 import ItemGap from '../../components/ItemGap';
@@ -8,85 +8,132 @@ import SearchFilter from '../../components/SearchFilter';
 import { bulkOptions, DateDropOptions } from '../../components/FilterData';
 import TableCan from '../../components/TableCan';
 import NotificationRow from './component/NotificationRow';
-import { notificationStatics } from '../../constants/statisticsData';
 import NotificationModal, { NotificationFormValues } from './component/NotificationModal';
 import DeleteConfirmationModal from './component/DeleteConfirmationModal';
+import { useQuery, useMutation } from '@tanstack/react-query';
+import { fetchNotification, NotificationData, createNotification, updateNotification, deleteNotification } from '../../queries/notification/notification';
+import Loader from '../../components/Loader';
+import { toast } from 'react-toastify';
 
 const Notification: React.FC = () => {
   const navigate = useNavigate();
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [selectedNotification, setSelectedNotification] = useState<NotificationFormValues | null>(null);
+  const [selectedNotification, setSelectedNotification] = useState<NotificationData | null>(null);
   const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
-
-  // New state for filtering
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedPeriod, setSelectedPeriod] = useState('9999'); // Default to 'All time'
-  const [filteredNotifications, setFilteredNotifications] = useState(notificationStatics);
+  const [selectedPeriod, setSelectedPeriod] = useState('9999'); 
 
-  // Filter notifications based on search term and period
-  useEffect(() => {
-    const now = new Date();
-    const filterNotifications = () => {
-      return notificationStatics.filter(notification => {
-        // Search filter
-        const matchesSearch = notification.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          notification.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          notification.location.toLowerCase().includes(searchTerm.toLowerCase());
+  const { data: queryData, isLoading, error, refetch } = useQuery({
+    queryKey: ['notification'],
+    queryFn: () => fetchNotification(),
+  });
 
-        // Period filter
-        const notificationDate = new Date(notification.created_at);
-        const daysDifference = Math.floor((now.getTime() - notificationDate.getTime()) / (1000 * 60 * 60 * 24));
-        const withinPeriod = daysDifference <= parseInt(selectedPeriod);
+  const { mutate: createMutation, isPending: isCreating, error: creatingError } = useMutation({
+    mutationKey: ['createNotification'],
+    mutationFn: (data: FormData) => createNotification(data),
+    onSuccess: () => {
+      toast.success('Created Successfully!')
+      refetch();
+      setIsNotificationModalOpen(false);
+      setSelectedNotification(null);
+    },
+    onError: (error) => {
+      toast.error(`Error: ${error.message}`);
+    },
+  });
 
-        return matchesSearch && withinPeriod;
-      });
-    };
+  const { mutate: updateMutation, isPending: isUpdating, error: updatingError } = useMutation({
+    mutationKey: ['updateNotification'],
+    mutationFn: ({ data, id }: { data: FormData; id: number }) => updateNotification(data, id),
+    onSuccess: () => {
+      toast.success('Updated Successfully!')
+      refetch();
+      setIsNotificationModalOpen(false);
+      setSelectedNotification(null);
+    },
+    onError: (error) => {
+      toast.error(`Error: ${error.message}`);
+    },
+  });
 
-    setFilteredNotifications(filterNotifications());
-  }, [searchTerm, selectedPeriod]);
+  const { mutate: deleteMutation, isPending: isdeleting, error: DeletingError } = useMutation({
+    mutationKey: ['deleteNotification'],
+    mutationFn: (id: number) => deleteNotification(id),
+    onSuccess: () => {
+      refetch();
+      setIsDeleteModalOpen(false);
+      toast.success('Deleted Successfully!')
+      setSelectedNotification(null);
+    },
+    onError: (error) => {
+      toast.error(`Error: ${error.message}`);
+    },
+  });
 
-  const handleSearch = (searchTerm: string) => {
-    setSearchTerm(searchTerm);
+  const confirmDelete = () => {
+    if (selectedNotification) {
+      deleteMutation(selectedNotification.id);
+    }
   };
 
-  const handlePeriodChange = (period: any) => {
-    setSelectedPeriod(period);
+  const handleNotificationSubmit = async (values: NotificationFormValues) => {
+    const formData = new FormData();
+    formData.append('title', values.title);
+    formData.append('content', values.content);
+    formData.append('location', values.location);
+    if (values.image instanceof File || typeof values.image === 'string') {
+      formData.append('image', values.image);
+    }
+
+    if (modalMode === 'create') {
+      createMutation(formData);
+    } else if (modalMode === 'edit' && selectedNotification) {
+      updateMutation({ data: formData, id: selectedNotification.id });
+    }
   };
 
-  const handleNotificationSubmit = (values: NotificationFormValues) => {
-    console.log('Notification values:', values);
-    // Implement create/update logic here
-    setIsNotificationModalOpen(false);
-    setSelectedNotification(null);
-  };
-
-  const handleEdit = (notification: NotificationFormValues) => {
+  const handleEdit = (notification: NotificationData) => {
     setSelectedNotification(notification);
     setModalMode('edit');
     setIsNotificationModalOpen(true);
   };
 
-  const handleDelete = (notification: NotificationFormValues) => {
+  const handleDelete = (notification: NotificationData) => {
     setSelectedNotification(notification);
     setIsDeleteModalOpen(true);
   };
 
-  const confirmDelete = () => {
-    if (selectedNotification) {
-      console.log('Deleting notification:', selectedNotification.id);
-      // Implement delete logic here
-    }
-    setIsDeleteModalOpen(false);
-    setSelectedNotification(null);
-  };
+  const filteredNotifications = React.useMemo(() => {
+    if (!queryData) return [];
+    return queryData.notifications.filter((notification: NotificationData) => {
+      const matchesSearch =
+        notification.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        notification.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        notification.location.toLowerCase().includes(searchTerm.toLowerCase());
+
+      const bookingDate = new Date(notification.created_at).getTime();
+      const now = Date.now();
+      const daysAgo = (now - bookingDate) / (1000 * 60 * 60 * 24);
+      const matchesDate = selectedPeriod === "9999" || daysAgo <= parseInt(selectedPeriod);
+
+      return matchesSearch  && matchesDate;
+    });
+  }, [queryData, searchTerm, selectedPeriod]);
+
+  if (isLoading) {
+    return <Loader />;
+  }
+  if (error) {
+    return <div>Error loading notifications</div>;
+  }
 
   return (
     <>
       <div className='bg-white'>
         <HorizontalAlign havsShadow={true}>
           <h1 className="text-2xl font-semibold px-6">
-            <span className='text-gray-400'>Admin Management</span> / Role Management
+            Notification
           </h1>
           <div className="px-6">
             <ItemGap>
@@ -106,7 +153,7 @@ const Notification: React.FC = () => {
           <ItemGap>
             <Dropdown
               options={DateDropOptions}
-              onChange={(e) => handlePeriodChange(e)}
+              onChange={(e) => setSelectedPeriod(e)}
               placeholder="Period"
               position="left-0"
             />
@@ -125,7 +172,7 @@ const Notification: React.FC = () => {
             }}>
               Send Notification
             </Button>
-            <SearchFilter handleFunction={handleSearch} />
+            <SearchFilter handleFunction={setSearchTerm} />
           </ItemGap>
         </HorizontalAlign>
 
@@ -136,8 +183,8 @@ const Notification: React.FC = () => {
           dataTr={filteredNotifications}
           TrName={NotificationRow}
           TrPropsName={{
-            onEdit: { handleEdit },
-            onDelete: { handleDelete }
+            onEdit: handleEdit,
+            onDelete: handleDelete,
           }}
         />
       </div>
@@ -149,7 +196,15 @@ const Notification: React.FC = () => {
           setSelectedNotification(null);
         }}
         onSubmit={handleNotificationSubmit}
-        initialValues={selectedNotification || undefined}
+        isPending={isCreating || isUpdating}
+        initialValues={selectedNotification ? {
+          id: selectedNotification.id.toString(),
+          title: selectedNotification.title,
+          content: selectedNotification.content,
+          location: selectedNotification.location,
+          image: selectedNotification.image,
+          imageUrl: selectedNotification.image,
+        } : undefined}
         mode={modalMode}
       />
 

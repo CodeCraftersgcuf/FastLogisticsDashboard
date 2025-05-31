@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { X, Upload } from 'lucide-react';
+import ButtonLoader from '../../../components/ButtonLoader';
 
 interface NotificationModalProps {
   isOpen: boolean;
@@ -9,6 +10,7 @@ interface NotificationModalProps {
   onSubmit: (values: NotificationFormValues) => void;
   initialValues?: NotificationFormValues;
   mode?: 'create' | 'edit';
+  isPending?: boolean;
 }
 
 export interface NotificationFormValues {
@@ -31,7 +33,7 @@ const validationSchema = Yup.object().shape({
     .required('Message is required'),
   location: Yup.string()
     .required('Location is required'),
-  profilePicture: Yup.mixed()
+  image: Yup.mixed()
     .test('fileSize', 'File too large', (value) => {
       if (!value || !(value instanceof File)) return true;
       return value.size <= 5000000; // 5MB
@@ -47,10 +49,11 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
   isOpen,
   onClose,
   onSubmit,
+  isPending,
   initialValues,
   mode = 'create'
 }) => {
-  const [previewUrl, setPreviewUrl] = useState<string | null>(initialValues?.imageUrl || null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(initialValues?.image || null);
 
   if (!isOpen) return null;
 
@@ -74,7 +77,7 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
       <div className="bg-white rounded-lg p-8 w-full max-w-lg relative overflow-y-auto">
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 text-gray-500 hover:text-gray-700"
+          className="cursor-pointer absolute right-4 top-4 text-gray-500 hover:text-gray-700"
         >
           <X size={24} />
         </button>
@@ -148,18 +151,6 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
                   Attachment
                 </label>
                 <div className="mt-1 flex items-center space-x-4">
-                  <label className="relative cursor-pointer bg-white border rounded-lg px-4 py-2 hover:bg-gray-50">
-                    <span className="flex items-center space-x-2">
-                      <Upload size={20} />
-                      <span>Upload Image</span>
-                    </span>
-                    <input
-                      type="file"
-                      className="hidden"
-                      accept="image/*"
-                      onChange={(e) => handleImageChange(e, setFieldValue)}
-                    />
-                  </label>
                   {previewUrl && (
                     <div className="relative w-24 h-24">
                       <img
@@ -173,12 +164,24 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
                           setPreviewUrl(null);
                           setFieldValue('image', null);
                         }}
-                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1"
+                        className="absolute cursor-pointer -top-2 -right-2 bg-red-500 text-white rounded-full p-1"
                       >
                         <X size={16} />
                       </button>
                     </div>
                   )}
+                  <label className="relative cursor-pointer bg-white border rounded-lg px-4 py-2 hover:bg-gray-50">
+                    <span className="flex items-center space-x-2">
+                      <Upload size={20} />
+                      <span>Upload Image</span>
+                    </span>
+                    <input
+                      type="file"
+                      className="hidden"
+                      accept="image/*"
+                      onChange={(e) => handleImageChange(e, setFieldValue)}
+                    />
+                  </label>
                 </div>
                 {errors.image && touched.image && (
                   <div className="text-red-500 text-sm mt-1">{errors.image as string}</div>
@@ -186,10 +189,11 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
               </div>
 
               <button
+                disabled={isPending}
                 type="submit"
-                className="w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors"
+                className="cursor-pointer w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors"
               >
-                {mode === 'create' ? 'Send' : 'Update'}
+                {isPending ? <ButtonLoader /> : mode === 'create' ? 'Send' : 'Update'}
               </button>
             </Form>
           )}

@@ -1,17 +1,16 @@
 import React from "react";
-import images from "../../constants/images";
+import Cookies from "js-cookie";
+import { API_DOMAIN_Img } from "../../apiConfig";
 
-interface ProfileProps {
-  name?: string;
-  img?: string;
-}
 
-const Profile: React.FC<ProfileProps> = ({ name = "Admin", img = images.admin }) => {
+const Profile: React.FC = () => {
+  const userCookie = Cookies.get('user');
+  const getUser = userCookie ? JSON.parse(userCookie) : null;
   return (
     <div className="flex items-center gap-4 ">
-      <img src={img} alt="profile" className="w-14 h-14 rounded-full" />
+      <img src={API_DOMAIN_Img+ getUser.profile_picture} alt="profile" className="w-14 h-14 rounded-full" loading="lazy" />
       <div>
-        <h4 className="text-lg ">Hey, {name}</h4>
+        <h4 className="text-lg ">Hey, {getUser?.name}</h4>
       </div>
     </div>
   );

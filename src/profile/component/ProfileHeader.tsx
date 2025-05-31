@@ -1,27 +1,26 @@
-import React from 'react'
-import HorizontalAlign from '../../components/HorizontalAlign'
-import Dropdown from '../../components/Dropdown'
-import { DateDropOptions } from '../../components/FilterData';
+import React from 'react';
+import HorizontalAlign from '../../components/HorizontalAlign';
 import Filter from '../../components/Filter';
 import { useNavigate } from 'react-router-dom';
 import ItemGap from '../../components/ItemGap';
 
 // list of props handlePeriodFunctionDropdown,url
 interface props {
-    handlePeriod: (value: string) => void,
+    handlePeriod?: (value: string) => void,
     url: string,
+    userId: number | string | undefined;
 }
 
 
-const ProfileHeader: React.FC<props> = ({ handlePeriod, url }) => {
+const ProfileHeader: React.FC<props> = ({ url, userId }) => {
     const navigate = useNavigate();
     const tabs = [
-        { value: '/user/management/alex/customer/detail', name: 'activity' },
-        { value: '/user/management/alex/customer/bookings', name: 'bookings' },
-        { value: '/user/management/alex/customer/transactions', name: 'transaction' },
-        { value: '/user/management/alex/customer/chat', name: 'chat' },
+        { value: `/user/management/${userId}/customer/detail`, name: 'activity' },
+        { value: `/user/management/${userId}/customer/bookings`, name: 'bookings' },
+        { value: `/user/management/${userId}/customer/transactions`, name: 'transaction' },
+        { value: `/user/management/${userId}/customer/chat`, name: 'chat' },
     ];
-    
+
     const handleNavigate = (e: string) => {
         navigate(e)
         // console.log(e)
@@ -36,12 +35,12 @@ const ProfileHeader: React.FC<props> = ({ handlePeriod, url }) => {
                         activeTab={url}
                         handleValue={(value: string) => handleNavigate(value)}
                     />
-                    <Dropdown
+                    {/* <Dropdown
                         options={DateDropOptions}
                         onChange={handlePeriod}
                         placeholder="This Week"
                         position="right-0"
-                    />
+                    /> */}
                 </ItemGap>
             </HorizontalAlign>
         </div>

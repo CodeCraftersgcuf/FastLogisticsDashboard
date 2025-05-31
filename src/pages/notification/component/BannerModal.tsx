@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Upload } from 'lucide-react';
+import ButtonLoader from '../../../components/ButtonLoader';
+import { API_DOMAIN_Img } from '../../../apiConfig';
 
 interface BannerModalProps {
   isOpen: boolean;
@@ -7,12 +9,13 @@ interface BannerModalProps {
   onSubmit: (values: BannerFormData) => void;
   initialValues?: BannerFormData | null;
   mode: 'create' | 'edit';
+  isPending:boolean;
 }
 
 interface BannerFormData {
   id?: string;
   subject: string;
-  image: string;
+  image: string | File; // Allow image to be a string or File
   location: string;
 }
 
@@ -21,6 +24,7 @@ const BannerModal: React.FC<BannerModalProps> = ({
   onClose,
   onSubmit,
   initialValues,
+  isPending,
   mode
 }) => {
   const [formData, setFormData] = useState<BannerFormData>({
@@ -34,21 +38,9 @@ const BannerModal: React.FC<BannerModalProps> = ({
   useEffect(() => {
     if (initialValues) {
       setFormData(initialValues);
-      setImagePreview(initialValues.image);
-    } else {
-      resetForm();
+      setImagePreview(API_DOMAIN_Img + initialValues.image);
     }
   }, [initialValues, isOpen]);
-
-  const resetForm = () => {
-    setFormData({
-      subject: '',
-      image: '',
-      location: ''
-    });
-    setImagePreview('');
-    setErrors({});
-  };
 
   const validateForm = (): boolean => {
     const newErrors: Partial<BannerFormData> = {};
@@ -58,6 +50,8 @@ const BannerModal: React.FC<BannerModalProps> = ({
     }
     if (!formData.image) {
       newErrors.image = 'Image is required';
+    } else if (formData.image instanceof File && !['image/jpeg', 'image/png'].includes(formData.image.type)) {
+      newErrors.image = 'The image field must be an image (JPEG or PNG)';
     }
     if (!formData.location) {
       newErrors.location = 'Location is required';
@@ -71,18 +65,17 @@ const BannerModal: React.FC<BannerModalProps> = ({
     e.preventDefault();
     if (validateForm()) {
       onSubmit(formData);
-      resetForm();
+      // Do not reset the form here; let the parent component handle success.
     }
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      setFormData(prev => ({ ...prev, image: file })); // Ensure image is a File object
       const reader = new FileReader();
       reader.onloadend = () => {
-        const imageUrl = reader.result as string;
-        setFormData(prev => ({ ...prev, image: imageUrl }));
-        setImagePreview(imageUrl);
+        setImagePreview(reader.result as string);
       };
       reader.readAsDataURL(file);
     }
@@ -158,7 +151,7 @@ const BannerModal: React.FC<BannerModalProps> = ({
                 </div>
               )}
             </div>
-            {errors.image && (
+            {errors.image && typeof errors.image === 'string' && (
               <p className="text-red-500 mt-1 text-sm">{errors.image}</p>
             )}
           </div>
@@ -186,10 +179,11 @@ const BannerModal: React.FC<BannerModalProps> = ({
               Cancel
             </button>
             <button
+            disabled={isPending}
               type="submit"
               className="px-6 py-2 bg-purple-600 cursor-pointer text-white rounded-lg hover:bg-purple-700 transition-colors"
             >
-              {mode === 'create' ? 'Create Banner' : 'Update Banner'}
+              {isPending ? <ButtonLoader/> : mode === 'create' ? 'Create Banner' : 'Update Banner'}
             </button>
           </div>
         </form>

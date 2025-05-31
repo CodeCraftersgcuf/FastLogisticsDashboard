@@ -2,8 +2,8 @@ import React from "react";
 
 interface StatCardProps {
   title: string;
-  value: string;
-  description: string;
+  value: string | number | any;
+  description?: string;
   icon: string;
   bgIcon: string;
   bgCard: string;
@@ -32,7 +32,7 @@ const StatCard: React.FC<StatCardProps> = ({
       <div className={`p-4 flex-1 flex flex-col gap-2 text-${textColor}`}>
         <h3 className=" font-medium">{title}</h3>
         <p className="text-2xl font-bold">{value}</p>
-        <span className={`text-[11px] font-medium ${statChangeColor}`}>{description}</span>
+        {/* <span className={`text-[11px] font-medium ${statChangeColor}`}>{description}</span> */}
       </div>
     </div>
   );

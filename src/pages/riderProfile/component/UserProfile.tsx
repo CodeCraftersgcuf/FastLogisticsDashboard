@@ -1,6 +1,7 @@
 import React from 'react';
 import images from '../../../constants/images';
 import MoreDropdown from '../../../components/MoreDropdown';
+import { API_DOMAIN_Img } from '../../../apiConfig';
 
 
 interface UserProfileProps {
@@ -17,9 +18,10 @@ interface UserProfileProps {
   };
   disabledLeft?:boolean;
   isRider?:boolean
+  handleEdit?:()=>void;
 }
 
-const UserProfile: React.FC<UserProfileProps> = ({ userData,disabledLeft,isRider }) => {
+const UserProfile: React.FC<UserProfileProps> = ({ userData,disabledLeft,isRider,handleEdit }) => {
   return (
     <div className={`${isRider ? 'bg-[#471204]' : 'bg-[#470434]'} text-white rounded-2xl shadow-lg  `}>
       <div className={`grid grid-cols-1 ${ disabledLeft ? "lg:grid-cols-9" : "lg:grid-cols-12"} gap-6`}>
@@ -43,15 +45,16 @@ const UserProfile: React.FC<UserProfileProps> = ({ userData,disabledLeft,isRider
             <div className="w-20 h-20 rounded-full bg-gray-200 overflow-hidden">
               {userData.profilePicture ? (
                 <img
-                  src={userData.profilePicture}
+                  src={API_DOMAIN_Img + userData.profilePicture}
                   alt={userData.name}
                   className="w-full h-full object-cover"
                 />
               ) : (
                 <div className={`w-full h-full flex items-center justify-center ${isRider ? 'bg-[#601A08]': "bg-[#620748]"}`}>
                   <span className="text-2xl font-bold">
-                    {userData.name.charAt(0)}
+                    {userData.name?.slice(0,1) ?? ''}
                   </span>
+                  {/* <img src={API_DOMAIN + userData.profilePicture} alt="user" className='w-10 h-10' /> */}
                 </div>
               )}
             </div>
@@ -82,7 +85,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ userData,disabledLeft,isRider
                 <p className="font-semibold">{userData.lastLogin}</p>
               </div>
               <div className="flex justify-end items-center gap-2">
-                <button className="p-2 hover:bg-white/10 cursor-pointer rounded-lg transition-colors border border-gray-400">
+                <button onClick={handleEdit} className="p-2 hover:bg-white/10 cursor-pointer rounded-lg transition-colors border border-gray-400">
                   <img src={images.profileBell} alt="icon" className='size-[20px]' />
                 </button>
                 <button className="p-2 hover:bg-white/10 cursor-pointer rounded-lg transition-colors border border-gray-400">

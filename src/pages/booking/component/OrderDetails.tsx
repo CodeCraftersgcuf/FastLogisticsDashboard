@@ -18,7 +18,7 @@ export interface OrderDetailsType {
   paymentMethod: string;
   deliveryFee: number;
   total: number;
-  deliveryStatus: 'Pending' | 'Completed' | 'Cancelled';
+  deliveryStatus: 'picked' | 'ordered' | 'completed';
 }
 
 interface OrderDetailsProps {
@@ -91,11 +91,11 @@ export const OrderDetails: React.FC<OrderDetailsProps> = ({ order }) => {
           <div className="space-y-6">
             {[
               ['Pay on Delivery', order.payOnDelivery ? 'Yes' : 'No'],
-              ['POD Amount', `₦${order.podAmount.toLocaleString()}`, order.podAmount > 0 && 'Completed'],
+              ['POD Amount', `₦${order.podAmount}`],
               ['Delivery Fee Payment', order.deliveryFeePayment],
               ['Payment Method', order.paymentMethod],
-              ['Delivery Fee', `₦${order.deliveryFee.toLocaleString()}`, order.deliveryFee > 0 && 'Completed'],
-              ['Total', `₦${order.total.toLocaleString()}`],
+              ['Delivery Fee', `₦${order.deliveryFee}`],
+              ['Total', `₦${order.total}`],
             ].map((item,index) => (
               <div key={index} className="grid grid-cols-2 gap-4">
                 <span className="text-gray-600">{item[0]}</span>
@@ -114,8 +114,8 @@ export const OrderDetails: React.FC<OrderDetailsProps> = ({ order }) => {
 
         <div className="flex items-center justify-between px-4">
           <span className="font-medium">Delivery Status</span>
-          <span className={`px-3 py-1 rounded ${order.deliveryStatus === 'Completed' ? 'bg-green-100 text-green-700' :
-            order.deliveryStatus === 'Cancelled' ? 'bg-red-100 text-red-700' :
+          <span className={`px-3 py-1 rounded ${order.deliveryStatus === 'completed' ? 'bg-green-100 text-green-700' :
+            order.deliveryStatus === 'ordered' ? 'bg-red-100 text-red-700' :
               'bg-yellow-100 text-yellow-700'
             }`}>
             {order.deliveryStatus}

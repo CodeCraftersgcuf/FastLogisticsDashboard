@@ -43,21 +43,21 @@ const DocumentViewer: React.FC<DocumentViewerProps> = ({ documents }) => {
         {documents.map((doc, index) => (
           <div key={index}>
             <h3 className="text-xl mb-4">{doc.title}</h3>
-            <div 
+            <div
               className="bg-gray-100 rounded-xl p-4 relative cursor-pointer group"
               onClick={() => setSelectedDoc(doc)}
             >
               {doc.type === 'image' ? (
-                <img 
-                  src={doc.url} 
+                <img
+                  src={doc.url}
                   alt={doc.title}
                   className="w-full h-48 object-cover rounded-lg"
                 />
               ) : (
                 <div className="relative">
-                  <img 
-                    src={doc.url} 
-                    alt={doc.title}
+                  <video
+                    src={doc.url}
+                    controls={false}
                     className="w-full h-48 object-cover rounded-lg"
                   />
                   <div className="absolute inset-0 flex items-center justify-center">
@@ -80,16 +80,16 @@ const DocumentViewer: React.FC<DocumentViewerProps> = ({ documents }) => {
         onClose={() => setSelectedDoc(null)}
       >
         {selectedDoc?.type === 'image' ? (
-          <img 
-            src={selectedDoc.url} 
+          <img
+            src={selectedDoc.url}
             alt={selectedDoc.title}
             className="w-[50%] max-h-[50vh] object-contain rounded-lg"
           />
         ) : (
-          <video 
+          <video
             src={selectedDoc.url}
             controls
-            className="w-full rounded-lg"
+            className="w-[50%] max-h-[50vh] rounded-lg"
           />
         )}
       </Modal>}

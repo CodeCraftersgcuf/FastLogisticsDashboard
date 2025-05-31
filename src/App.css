@@ -1,6 +1,6 @@
-@tailwind base;
+/* @tailwind base;
 @tailwind components;
-@tailwind utilities;
+@tailwind utilities; */
 /* Set scrollbar width for vertical scrolling */
 ::-webkit-scrollbar {
   width: 8px;

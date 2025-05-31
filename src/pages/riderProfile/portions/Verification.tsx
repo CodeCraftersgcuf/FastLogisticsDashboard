@@ -1,35 +1,58 @@
 import React from 'react'
-import ProfileHeader from '../component/ProfileHeader'
 import RiderProfile from '../component/RiderProfile';
 import DocumentViewer from '../component/DocumentViewer';
+import { useQuery } from '@tanstack/react-query';
+import { useParams } from 'react-router-dom';
+import { fetchUsersDetail } from '../../../queries/user/UserDetail';
+import { fetchRidersDetail } from '../../../queries/rider/riderDetail';
+import Loader from '../../../components/Loader';
+import { API_DOMAIN_Img } from '../../../apiConfig';
+import ProfileHeader from '../component/ProfileHeader';
 
 const Verification : React.FC = () => {
     const handleDetailsClick = (e: any) => {
         console.log(e.target.value);
     }
+    const {username} = useParams();
+    const {data:verificationData,isLoading,error} = useQuery({
+        queryKey: ['verification'],
+        queryFn: ()=> fetchRidersDetail(Number(username))
+    })
+    console.log(verificationData?.data.rider_verification);
+    const verificationDocumentData = verificationData?.data.rider_verification;
     const profileData = {
         tier: 3,
-        balance: 105000,
-        completionPercentage: 75,
+        balance: verificationData?.data.wallet.balance,
+        completionPercentage: (() => {
+            const steps = {
+                personalInformation: verificationDocumentData?.first_name && verificationDocumentData?.last_name && verificationDocumentData?.email_address && verificationDocumentData?.phone && verificationDocumentData?.address && verificationDocumentData?.nin_number,
+                vehicleInformation: verificationDocumentData?.vehicle_type && verificationDocumentData?.plate_number && verificationDocumentData?.riders_permit_number && verificationDocumentData?.color,
+                uploads: verificationDocumentData?.passport_photo && verificationDocumentData?.rider_permit_upload && verificationDocumentData?.vehicle_video,
+                tierPayment: false,
+            };
+            const totalSteps = Object.keys(steps).length;
+            const completedSteps = Object.values(steps).filter(Boolean).length;
+            return Math.round((completedSteps / totalSteps) * 100);
+        })(),
         personalDetails: {
-            firstName: "Abdul malik",
-            lastName: "Qamardeen",
-            email: "qamardeenoladimeji@gmail.com",
-            phoneNumber: "07012345678",
-            address: "No 2, abcdffttg street, ibadan, oyo",
-            ninNumber: "1245676533",
+            firstName: verificationDocumentData?.first_name,
+            lastName: verificationDocumentData?.last_name,
+            email: verificationDocumentData?.email_address,
+            phoneNumber: verificationDocumentData?.phone,
+            address: verificationDocumentData?.address,
+            ninNumber: verificationDocumentData?.nin_number,
         },
         vehicleDetails: {
-            vehicleType: "Motorcycle",
-            plateNumber: "1245676533",
-            permitNumber: "1245676533",
-            color: "Blue",
+            vehicleType: verificationDocumentData?.vehicle_type,
+            plateNumber: verificationDocumentData?.plate_number,
+            permitNumber: verificationDocumentData?.riders_permit_number,
+            color: verificationDocumentData?.color,
         },
-        isApproved: false,
+        isApproved: true,
         completedSteps: {
-            personalInformation: true,
-            vehicleInformation: true,
-            uploads: false,
+            personalInformation: verificationDocumentData?.first_name && verificationDocumentData?.last_name && verificationDocumentData?.email_address && verificationDocumentData?.phone && verificationDocumentData?.address && verificationDocumentData?.nin_number,
+            vehicleInformation: verificationDocumentData?.vehicle_type && verificationDocumentData?.plate_number && verificationDocumentData?.riders_permit_number && verificationDocumentData?.color,
+            uploads: verificationDocumentData?.passport_photo && verificationDocumentData?.rider_permit_upload && verificationDocumentData?.vehicle_video,
             tierPayment: false,
         },
     };
@@ -38,22 +61,31 @@ const Verification : React.FC = () => {
         {
             type: 'image' as const,
             title: 'Passport',
-            url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=2574&auto=format&fit=crop',
+            url: API_DOMAIN_Img+ verificationDocumentData?.passport_photo,
         },
         {
             type: 'image' as const,
             title: 'Riders Permit',
-            url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop',
+            url: API_DOMAIN_Img+ verificationDocumentData?.rider_permit_upload,
         },
         {
             type: 'video' as const,
             title: 'Vehicle Video',
-            url: 'https://player.vimeo.com/external/517090081.sd.mp4?s=60b8a49192c8ae3e08e7d3a47f5879a681591497&profile_id=165&oauth2_token_id=57447761',
+            url: API_DOMAIN_Img+ verificationDocumentData?.vehicle_video,
         },
     ];
+    if (isLoading) {
+        return <Loader/>
+    }
+    if (error) {
+        return <div>Error: {error.message}</div>
+    }
+    if (!verificationData?.data.rider_verification) {
+        return <div>No data found</div>
+    }
     return (
         <>
-            <ProfileHeader url='verification' handlePeriod={handleDetailsClick} />
+            <ProfileHeader url='verification' username={username} handlePeriod={handleDetailsClick} />
             <div className='p-6'>
                 <div className='grid grid-cols-1 lg:grid-cols-12 gap-6'>
                     <div className='lg:col-span-8'>

@@ -2,7 +2,7 @@ import React, { useState, useMemo } from "react";
 import Dropdown from "../../components/Dropdown";
 import HorizontalAlign from "../../components/HorizontalAlign";
 import { bulkOptions, DateDropOptions, onlineStatus, riderStatus, tierStatus } from "../../components/FilterData";
-import { riderStats, riderTableStatic } from '../../constants/statisticsData'
+import { riderTableStatic } from '../../constants/statisticsData'
 import StatCard from "../../components/StatCard";
 import Button from "../../components/buttons/Button";
 import ItemGap from "../../components/ItemGap";
@@ -11,10 +11,23 @@ import TableCan from "../../components/TableCan";
 import AddUserModal from "../userManagement/components/AddUserModal";
 import RiderRow from "./component/RiderRow";
 import { useNavigate } from "react-router-dom";
+import Loader from "../../components/Loader";
+import { fetchRidersManagement } from "../../queries/rider/riderManagement";
+import { useQuery } from "@tanstack/react-query";
+import images from "../../constants/images";
 
-const RiderManagement : React.FC = () => {
+const RiderManagement: React.FC = () => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const { data: riders, isLoading, error } = useQuery({
+    queryKey: ['riders'],
+    queryFn: fetchRidersManagement,
+    refetchOnWindowFocus: false,
+    retry: 1,
+  })
+
+
   // const [selectedDate, setSelectedDate] = useState('7'); // Default to "This week"
   const [selectedRiderStatus, setSelectedRiderStatus] = useState('all');
   const [selectedTier, setSelectedTier] = useState('all');
@@ -23,17 +36,19 @@ const RiderManagement : React.FC = () => {
 
   // Filter riders based on all criteria
   const filteredRiders = useMemo(() => {
-    return riderTableStatic.filter(rider => {
-      const matchesRiderStatus = selectedRiderStatus === 'all' || rider.status.toLowerCase() === selectedRiderStatus.toLowerCase();
-      const matchesTier = selectedTier === 'all' || rider.tier.toLowerCase() === selectedTier.toLowerCase();
-      const matchesOnlineStatus = selectedOnlineStatus === 'all' || rider.status.toLowerCase() === selectedOnlineStatus.toLowerCase();
-      const matchesSearch = rider.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          rider.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          rider.phone.toLowerCase().includes(searchQuery.toLowerCase());
+    if (!riders) return [];
 
-      return matchesRiderStatus && matchesTier && matchesOnlineStatus && matchesSearch;
+    return riders.data.users.filter(rider => {
+      const matchesRiderStatus = selectedRiderStatus === 'all' || rider.is_active === Number(selectedRiderStatus);
+      // const matchesTier = selectedTier === 'all' || rider.tier.toLowerCase() === selectedTier.toLowerCase();
+      const matchesOnlineStatus = selectedOnlineStatus === 'all' || rider.is_active === Number(selectedOnlineStatus);
+      const matchesSearch = rider.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        rider.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        rider.phone.toLowerCase().includes(searchQuery.toLowerCase());
+// && matchesTier
+      return matchesRiderStatus  && matchesOnlineStatus && matchesSearch;
     });
-  }, [selectedRiderStatus, selectedTier, selectedOnlineStatus, searchQuery]);
+  }, [selectedRiderStatus, selectedTier, selectedOnlineStatus, searchQuery,riders]);
 
   const handleDateChange = (value: string) => {
     // setSelectedDate(value);
@@ -66,7 +81,40 @@ const RiderManagement : React.FC = () => {
     console.log("New user data:", values);
     setIsModalOpen(false);
   };
-
+  const riderStats = [
+    {
+      title: "Total Rider",
+      value: riders?.data.total_users,
+      description: "+5% increase from last month",
+      icon: images.rider,
+      bgIcon: "bg-[#601A08]",
+      bgCard: "bg-[#471204]",
+      textColor: "white",
+      statChangeColor: "text-green-500",
+    },
+    {
+      title: "Active Rider",
+      value: riders?.data.active_users,
+      description: "+5% increase from last month",
+      icon: images.rider,
+      bgIcon: "bg-[#601A08]",
+      bgCard: "bg-[#471204]",
+      textColor: "white",
+      statChangeColor: "text-green-500",
+    },
+    {
+      title: "Inactive Rider",
+      value: riders?.data.inactive_users,
+      description: "+5% increase from last month",
+      icon: images.rider,
+      bgIcon: "bg-[#601A08]",
+      bgCard: "bg-[#471204]",
+      textColor: "white",
+      statChangeColor: "text-green-500",
+    },
+  ]
+  if (isLoading) return <Loader />;
+  if (error) return <div className="p-8 text-center">Error loading riders</div>;
   return (
     <div className="">
       <div className="bg-white">
@@ -131,7 +179,7 @@ const RiderManagement : React.FC = () => {
         <TableCan
           heading="All Riders"
           showHeading={true}
-          headerTr={['Rider Name','Email','Phone No','Wallet Balance','Status','tier','Actions','Other']}
+          headerTr={['Rider Name', 'Email', 'Phone No', 'Wallet Balance', 'Status', 'tier', 'Actions', 'Other']}
           dataTr={filteredRiders}
           TrName={RiderRow}
         />

@@ -1,19 +1,9 @@
 import React from 'react';
 import { X, CheckCircle, XCircle, AlertTriangle, Copy } from 'lucide-react';
+import { Transaction } from '../../../queries/transaction/transaction';
+import { formatAmount, formatCreatedAt } from '../../../constants/help';
+import { toast } from 'react-toastify';
 
-interface Transaction {
-    id: number;
-    transactionId: string;
-    amount: number;
-    status: 'pending' | 'success' | 'failed';
-    payment_method: string;
-    date: string;
-    service?: string;
-    txnType: string;
-    bankName?: string;
-    accountName?: string;
-    accountNumber?: string;
-}
 
 interface TransactionDetailsModalProps {
     isOpen: boolean;
@@ -26,7 +16,7 @@ const TransactionDetailsModal: React.FC<TransactionDetailsModalProps> = ({ isOpe
 
     // Dynamic Status Styling
     const statusDetails = {
-        success: {
+        completed: {
             color: "text-green-600",
             bg: "bg-green-200",
             icon: <CheckCircle size={50} className="text-green-600" />,
@@ -70,9 +60,9 @@ const TransactionDetailsModal: React.FC<TransactionDetailsModalProps> = ({ isOpe
                     <div className="flex justify-between">
                         <span className="font-semibold">Txn ID</span>
                         <span className="flex items-center gap-2">
-                            {transaction.transactionId}
+                            {'transaction_'+ transaction.id}
                             <button 
-                                onClick={() => navigator.clipboard.writeText(transaction.transactionId)}
+                                onClick={() => {navigator.clipboard.writeText(String(transaction.id));toast.success('Copied to clipboard!')}}
                                 className="text-gray-500 hover:text-gray-700"
                             >
                                 <Copy size={16} />
@@ -82,22 +72,22 @@ const TransactionDetailsModal: React.FC<TransactionDetailsModalProps> = ({ isOpe
 
                     <div className="flex justify-between">
                         <span className="font-semibold">Txn Type</span>
-                        <span>{transaction.txnType || 'N/A'}</span>
+                        <span>{transaction.transaction_type}</span>
                     </div>
 
                     <div className="flex justify-between">
                         <span className="font-semibold">Amount</span>
-                        <span>N{transaction.amount.toLocaleString()}</span>
+                        <span>N{formatAmount(transaction.amount)}</span>
                     </div>
 
-                    <div className="flex justify-between">
+                    {/* <div className="flex justify-between">
                         <span className="font-semibold">Service</span>
-                        <span>{transaction.service || 'N/A'}</span>
-                    </div>
+                        <span>{transaction. || 'N/A'}</span>
+                    </div> */}
 
                     <div className="flex justify-between">
                         <span className="font-semibold">Txn Date/Time</span>
-                        <span>{transaction.date}</span>
+                        <span>{formatCreatedAt(transaction.created_at)}</span>
                     </div>
                 </div>
 

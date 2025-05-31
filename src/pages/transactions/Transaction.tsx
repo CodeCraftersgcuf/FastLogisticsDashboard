@@ -6,40 +6,48 @@ import Filter from '../../components/Filter';
 import Dropdown from '../../components/Dropdown';
 import { bulkOptions, DateDropOptions, rolestabs, transactionstatus, typeOptions } from '../../components/FilterData';
 import StatCard from '../../components/StatCard';
-import {  transactions, transactionsData } from '../../constants/statisticsData';
+import {  transactions } from '../../constants/statisticsData';
 import SearchFilter from '../../components/SearchFilter';
 import TableCan from '../../components/TableCan';
 import TransactionsRow from './component/TransactionsRow';
+import { useQuery } from '@tanstack/react-query';
+import { fetchTransactionsManagement, Transaction as interfacetransaction } from '../../queries/transaction/transaction';
+import Loader from '../../components/Loader';
 
 
 const Transaction : React.FC = () => {
-  // const navigate = useNavigate();
-  const [activeRole, setActiveRole] = useState('All');
-  const [activeType, setActiveType] = useState('All');
-  const [activeStatus, setActiveStatus] = useState('All');
-  const [activePeriod, setActivePeriod] = useState('All');
+  const [activeRole, setActiveRole] = useState('all');
+  const [activeType, setActiveType] = useState('all');
+  const [activeStatus, setActiveStatus] = useState('all');
+  const [activePeriod, setActivePeriod] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const {data:queryData,isLoading,error,refetch} = useQuery({
+    queryKey:['transactions'],
+    queryFn : fetchTransactionsManagement,
+  });
+  
 
   const filteredTransactions = useMemo(() => {
-    return transactionsData.filter((transaction: any) => {
-      // Role filter
-      if (activeRole !== 'All' && transaction.role.toLowerCase() !== activeRole.toLowerCase()) {
+    if (!queryData?.transactions) return [];
+    return queryData.transactions.filter((transaction: interfacetransaction) => {
+      // Role filterqueryData
+      if (activeRole !== 'all' && transaction.user.role.toLowerCase() !== activeRole.toLowerCase()) {
         return false;
       }
 
       // Type filter
-      if (activeType !== 'All' && transaction.payment_method.toLowerCase() !== activeType.toLowerCase()) {
+      if (activeType !== 'all' && transaction.transaction_type.toLowerCase() !== activeType.toLowerCase()) {
         return false;
       }
 
       // Status filter
-      if (activeStatus !== 'All' && transaction.status.toLowerCase() !== activeStatus.toLowerCase()) {
+      if (activeStatus !== 'all' && transaction.status.toLowerCase() !== activeStatus.toLowerCase()) {
         return false;
       }
 
       // Period filter
-      if (activePeriod !== 'All') {
-        const transactionDate = new Date(transaction.date);
+      if (activePeriod !== 'all') {
+        const transactionDate = new Date(transaction.created_at);
         const today = new Date();
         const daysDiff = Math.floor((today.getTime() - transactionDate.getTime()) / (1000 * 60 * 60 * 24));
 
@@ -61,14 +69,13 @@ const Transaction : React.FC = () => {
       if (searchQuery.trim()) {
         const searchLower = searchQuery.toLowerCase().trim();
         return (
-          transaction.username.toLowerCase().includes(searchLower) ||
-          transaction.transactionId.toLowerCase().includes(searchLower)
+          transaction.user.name.toLowerCase().includes(searchLower)
         );
       }
 
       return true;
     });
-  }, [activeRole, activeType, activeStatus, activePeriod, searchQuery]);
+  }, [activeRole, activeType, activeStatus, activePeriod, searchQuery,queryData]);
 
   const handleRoleFilter = (value: string) => {
     setActiveRole(value);
@@ -89,6 +96,9 @@ const Transaction : React.FC = () => {
   const handleSearch = (value: string) => {
     setSearchQuery(value);
   };
+
+  if(isLoading) return <Loader/>;
+  if(error) return <div>Error loading transactions</div>;
 
   return (
     <>

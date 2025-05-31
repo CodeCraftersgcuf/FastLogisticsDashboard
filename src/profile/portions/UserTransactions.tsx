@@ -10,39 +10,54 @@ import HorizontalAlign from '../../components/HorizontalAlign';
 import StatCard from '../../components/StatCard';
 import { transactions, transactionsData } from '../../constants/statisticsData';
 import { bulkOptions, DateDropOptions, transactionstatus, typeOptions } from '../../components/FilterData';
+import { useParams } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { fetchUserTransactions, Transaction } from '../../queries/user/UserDetail';
+import Loader from '../../components/Loader';
+import images from '../../constants/images';
+import { formatAmount } from '../../constants/help';
 // import { useNavigate } from 'react-router-dom';
 
-const UserTransactions : React.FC = () => {
+const UserTransactions: React.FC = () => {
     const handleDetailsClick = (e: any) => {
         console.log(e.target.value);
     }
+    const { username } = useParams();
+    const { data: rawUserTransaction, isLoading, error } = useQuery({
+        queryKey: ['userdetail', username],
+        queryFn: () => fetchUserTransactions(Number(username)),
+        enabled: !!username, // Only run if username exists
+    });
+    console.log(rawUserTransaction);
+
     // const navigate = useNavigate();
     // const [activeRole, setActiveRole] = useState('All');
-    const [activeType, setActiveType] = useState('All');
-    const [activeStatus, setActiveStatus] = useState('All');
-    const [activePeriod, setActivePeriod] = useState('All');
+    const [activeType, setActiveType] = useState('all');
+    const [activeStatus, setActiveStatus] = useState('all');
+    const [activePeriod, setActivePeriod] = useState('ll');
     const [searchQuery, setSearchQuery] = useState('');
 
     const filteredTransactions = useMemo(() => {
-        return transactionsData.filter((transaction: any) => {
+        if (!rawUserTransaction) return [];
+        return rawUserTransaction.data.transactions.filter((transaction: Transaction) => {
             // Role filter
             // if (activeRole !== 'All' && transaction.role.toLowerCase() !== activeRole.toLowerCase()) {
             //     return false;
             // }
 
             // Type filter
-            if (activeType !== 'All' && transaction.payment_method.toLowerCase() !== activeType.toLowerCase()) {
+            if (activeType !== 'all' && transaction.transaction_type.toLowerCase() !== activeType.toLowerCase()) {
                 return false;
             }
 
             // Status filter
-            if (activeStatus !== 'All' && transaction.status.toLowerCase() !== activeStatus.toLowerCase()) {
+            if (activeStatus !== 'all' && transaction.status.toLowerCase() !== activeStatus.toLowerCase()) {
                 return false;
             }
 
             // Period filter
-            if (activePeriod !== 'All') {
-                const transactionDate = new Date(transaction.date);
+            if (activePeriod !== 'all') {
+                const transactionDate = new Date(transaction.created_at);
                 const today = new Date();
                 const daysDiff = Math.floor((today.getTime() - transactionDate.getTime()) / (1000 * 60 * 60 * 24));
 
@@ -64,14 +79,14 @@ const UserTransactions : React.FC = () => {
             if (searchQuery.trim()) {
                 const searchLower = searchQuery.toLowerCase().trim();
                 return (
-                    transaction.username.toLowerCase().includes(searchLower) ||
-                    transaction.transactionId.toLowerCase().includes(searchLower)
+                    transaction.user.name.toLowerCase().includes(searchLower)
                 );
             }
 
             return true;
         });
-    }, [ activeType, activeStatus, activePeriod, searchQuery]);
+        // 
+    }, [activeType, activeStatus,searchQuery, activePeriod,  rawUserTransaction]);
     // activeRole,
 
     // const handleRoleFilter = (value: string) => {
@@ -93,9 +108,43 @@ const UserTransactions : React.FC = () => {
     const handleSearch = (value: string) => {
         setSearchQuery(value);
     };
+    const transactions = [
+        {
+            title: "Total Transactions",
+            value: "N " + formatAmount(rawUserTransaction?.data.stats.total),
+            description: "+5% increase from last month",
+            icon: images.transactions,
+            bgIcon: "bg-[#620748]",
+            bgCard: "bg-[#470434]",
+            textColor: "white",
+            statChangeColor: "text-green-500",
+        },
+        {
+            title: "Topup",
+            value: "N " + formatAmount(rawUserTransaction?.data.stats.topupTransactions),
+            description: "+5% increase from last month",
+            icon: images.transactions,
+            bgIcon: "bg-[#620748]",
+            bgCard: "bg-[#470434]",
+            textColor: "white",
+            statChangeColor: "text-green-500",
+        },
+        {
+            title: "Withdrawal",
+            value: "N " + formatAmount(rawUserTransaction?.data.stats.withdrawalTransactions),
+            description: "+5% increase from last month",
+            icon: images.transactions,
+            bgIcon: "bg-[#620748]",
+            bgCard: "bg-[#470434]",
+            textColor: "white",
+            statChangeColor: "text-green-500",
+        },
+    ]
+    if (isLoading) return <Loader />;
+    if (error) return <div>Error loading transactions</div>;
     return (
         <>
-            <ProfileHeader url='transaction' handlePeriod={handleDetailsClick} />
+            <ProfileHeader url='transaction' userId={username} handlePeriod={handleDetailsClick} />
             <div className='flex flex-col gap-4 p-6'>
                 <div className='grid grid-cols-1 lg:grid-cols-3 gap-6'>
                     {transactions.map((stat, index) => (
@@ -106,7 +155,7 @@ const UserTransactions : React.FC = () => {
                     <ItemGap>
                         <Filter
                             tabs={typeOptions}
-                            activeTab={activeType}
+                            activeTab={'all'}
                             handleValue={handleTypeFilter}
                         />
                         <Dropdown

@@ -3,23 +3,10 @@ import { formatAmount, formatCreatedAt } from '../../../constants/help';
 import Button from '../../../components/buttons/Button';
 import { LocateFixed } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { ParcelData } from '../../../queries/user/UserDetail';
 
 interface props {
-  displayData: {
-    id: number;
-    rider_name?: string;
-    username?: string;
-    destination: {
-      location1?: string;
-      location2?: string;
-    };
-    payOnDelivery?: string;
-    amount?: number;
-    pickdate?: string;
-    dropdate?: string;
-    status: 'active'|'completed'|'scheduled';
-    orderId:string;
-  };
+  displayData: ParcelData;
 }
 
 const BookingRow: React.FC<props> = ({ displayData }) => {
@@ -32,27 +19,31 @@ const BookingRow: React.FC<props> = ({ displayData }) => {
         <td className="p-2 px-4 w-10">
           <input type="checkbox" />
         </td>
-        <td className="p-2">{displayData.orderId}</td>
-        <td className="p-2">{displayData.rider_name}</td>
-        <td className="p-2">{displayData.username}</td>
+        <td className="p-2">{displayData.id}</td>
+        <td className="p-2">{displayData.sender_name || 'N/A'}</td>
+        <td className="p-2">{displayData.receiver_name || 'N/A'}</td>
         <td className="p-2">
           <div className='space-y-2 text-sm'>
             <div className='flex items-center gap-1'>
               <LocateFixed color='green' size={20} />
-              {displayData.destination.location1}
+              {displayData.sender_address}
             </div>
             <div className='flex items-center gap-1'>
               <LocateFixed color='red' size={20} />
-              {displayData.destination.location2}
+              {displayData.receiver_address}
             </div>
           </div>
         </td>
         <td className="p-2">N {formatAmount(displayData.amount)}</td>
-        <td className="p-2 text-sm">{formatCreatedAt(displayData.pickdate)}</td>
-        <td className="p-2 text-sm">{formatCreatedAt(displayData.dropdate)}</td>
+        <td className="p-2 text-sm">
+            <span>{formatCreatedAt(displayData.picked_up_at)}</span>
+        </td>
+        <td className="p-2 text-sm">
+            <span>{formatCreatedAt(displayData.delivered_at)}</span>
+        </td>
         <td className="p-2">
           <div className='flex flex-col justify-center items-center text-center'>
-            <div className={`${displayData.status === 'completed' ? 'bg-green-800' :  displayData.status =='active'? 'bg-purple-500': 'bg-orange-500'} rounded-full w-6 h-6`}></div>
+            <div className={`${displayData.status === 'completed' ? 'bg-green-800' : displayData.status == 'active' ? 'bg-purple-500' : 'bg-orange-500'} rounded-full w-6 h-6`}></div>
           </div>
         </td>
         <td className='p-2'>

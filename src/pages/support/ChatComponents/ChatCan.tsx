@@ -27,12 +27,14 @@ const ChatCan: React.FC<props> = ({notShowInputCan}) => {
       isUser: true
     }
   ]);
-
+  
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   // Scroll to the last message whenever messages update
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (!notShowInputCan) {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
   }, [messages]);
 
   const handleSendMessage = (text: string) => {
@@ -58,7 +60,7 @@ const ChatCan: React.FC<props> = ({notShowInputCan}) => {
   };
 
   return (
-    <div className={`flex flex-col h-[700px] rounded-md shadow-sm shadow-gray-400 bg-white ${!notShowInputCan && 'rounded-t-none rounded-bl-none'}`}>
+    <div className={`flex flex-col h-[700px] rounded-md shadow-sm shadow-gray-400 bg-white `}>
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.map((message) => (
           <MessageCan

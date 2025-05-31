@@ -2,7 +2,6 @@ import React, { useState, useMemo } from "react";
 import Dropdown from "../../components/Dropdown";
 import HorizontalAlign from "../../components/HorizontalAlign";
 import { bulkOptions, DateDropOptions, onlineStatus } from "../../components/FilterData";
-import { userStatic, userTableStatic } from '../../constants/statisticsData'
 import StatCard from "../../components/StatCard";
 import Button from "../../components/buttons/Button";
 import ItemGap from "../../components/ItemGap";
@@ -10,48 +9,95 @@ import SearchFilter from "../../components/SearchFilter";
 import TableCan from "../../components/TableCan";
 import UsersRow from "./components/UsersRow";
 import AddUserModal from "./components/AddUserModal";
+import { fetchUsersManagement } from "../../queries/user/UserManagement";
+import { useQuery } from "@tanstack/react-query";
+import images from "../../constants/images";
+import Loader from "../../components/Loader";
 
-const UserManagement : React.FC = () => {
+const UserManagement: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // const [selectedDate, setSelectedDate] = useState('7'); // Default to "This week"
-  const [selectedStatus, setSelectedStatus] = useState('all');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
+  const { data: rawUserManagement, isLoading } = useQuery({
+    queryKey: ["usermanagementqueries"],
+    queryFn: fetchUsersManagement,
+  });
+
+  console.log("Fetch data: ", rawUserManagement);
 
   // Filter users based on status and search query
   const filteredUsers = useMemo(() => {
-    return userTableStatic.filter(user => {
-      const matchesStatus = selectedStatus === 'all' || user.status.toLowerCase() === selectedStatus.toLowerCase();
-      const matchesSearch = 
-        user.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    if (!rawUserManagement?.data?.users) return [];
+    return rawUserManagement.data.users.filter((user) => {
+      const matchesStatus =
+        selectedStatus === "all" || user.is_active.toString() === selectedStatus;
+      const matchesSearch =
+        user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
         user.phone.toLowerCase().includes(searchQuery.toLowerCase());
       return matchesStatus && matchesSearch;
     });
-  }, [selectedStatus, searchQuery]);
+  }, [rawUserManagement, selectedStatus, searchQuery]);
 
   const handleDateChange = (value: string) => {
-    // setSelectedDate(value);
-    console.log(value)
+    console.log("Selected date range: ", value);
     // Here you would typically fetch data for the selected date range
   };
 
   const handleStatusChange = (status: string) => {
+    console.log("Selected status: ", status);
     setSelectedStatus(status);
   };
 
   const handleBulkAction = (action: string) => {
-    console.log("Bulk action selected:", action);
+    console.log("Bulk action selected: ", action);
     // Implement bulk actions here
   };
 
   const handleSearch = (query: string) => {
+    console.log("Search query: ", query);
     setSearchQuery(query);
   };
 
   const handleAddUser = (values: any) => {
-    console.log("New user data:", values);
+    console.log("New user data: ", values);
     setIsModalOpen(false);
   };
+
+  const userStatic = [
+    {
+      title: "Total Users",
+      value: rawUserManagement?.data.total_users,
+      description: "+5% increase from last month",
+      icon: images.user,
+      bgIcon: "bg-[#620748]",
+      bgCard: "bg-[#470434]",
+      textColor: "white",
+      statChangeColor: "text-green-500",
+    },
+    {
+      title: "Online Users",
+      value: rawUserManagement?.data.active_users,
+      description: "+5% increase from last month",
+      icon: images.user,
+      bgIcon: "bg-[#620748]",
+      bgCard: "bg-[#470434]",
+      textColor: "white",
+      statChangeColor: "text-green-500",
+    },
+    {
+      title: "Offline Users",
+      value: rawUserManagement?.data.inactive_users,
+      description: "+5% increase from last month",
+      icon: images.user,
+      bgIcon: "bg-[#620748]",
+      bgCard: "bg-[#470434]",
+      textColor: "white",
+      statChangeColor: "text-green-500",
+    },
+  ];
+
+  if (isLoading) return <Loader />;
 
   return (
     <div className="">
@@ -100,7 +146,15 @@ const UserManagement : React.FC = () => {
         <TableCan
           heading="Users"
           showHeading={true}
-          headerTr={['Username','Email','Phone No','Wallet Balance','Status','Actions','Other']}
+          headerTr={[
+            "Username",
+            "Email",
+            "Phone No",
+            "Wallet Balance",
+            "Status",
+            "Actions",
+            "Other",
+          ]}
           dataTr={filteredUsers}
           TrName={UsersRow}
         />
@@ -114,5 +168,6 @@ const UserManagement : React.FC = () => {
     </div>
   );
 };
+
 
 export default UserManagement;

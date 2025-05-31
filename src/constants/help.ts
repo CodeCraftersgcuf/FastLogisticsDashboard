@@ -2,11 +2,9 @@ export function formatAmount(amount: any) {
     if (typeof amount === "string") {
         amount = parseFloat(amount);
     }
-
     if (isNaN(amount)) {
         return "Invalid number";
     }
-
     // Round to nearest thousand
     const roundedAmount = Math.round(amount / 1000) * 1000;
 
@@ -17,7 +15,7 @@ export function dummyImage() {
     // https://randomuser.me/api/portraits/women/31.jpg using this link and math.random
     return `https://randomuser.me/api/portraits/men/${Math.floor(Math.random() * 100) + 1}.jpg`;
 }
-export function formatCreatedAt(timestamp : any) {
+export function formatCreatedAt(timestamp: any) {
     const date = new Date(timestamp);
 
     if (isNaN(date.getTime())) {
@@ -38,4 +36,14 @@ export function formatCreatedAt(timestamp : any) {
     hours = hours % 12 || 12;
 
     return `${day}/${month}/${year} - ${hours}:${minutes} ${amPm}`;
+}
+
+export function sanitizeStorageUrl(text: string): string {
+    const baseUrl = 'https://fastlogistic.hmstech.xyz/storage/';
+
+    // Remove any occurrences of the base URL or "storage" from the text
+    const sanitizedText = text.replace(new RegExp(`${baseUrl}|storage`, 'gi'), '').trim();
+
+    // Ensure the text starts and ends with the base URL
+    return `${baseUrl}${sanitizedText}${sanitizedText ? '/' : ''}`;
 }

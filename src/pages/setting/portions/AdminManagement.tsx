@@ -12,6 +12,9 @@ import TableCan from "../../../components/TableCan";
 import AdminRow from "../component/AdminRow";
 import AddAdminModal from "../component/AddAdminModal";
 import { useNavigate } from "react-router-dom";
+import { fetchAdminsManagement } from "../../../queries/admin/adminManagement";
+import { useQuery } from "@tanstack/react-query";
+import Loader from "../../../components/Loader";
 
 const AdminManagement  : React.FC= () => {
     const navigate = useNavigate();
@@ -19,14 +22,21 @@ const AdminManagement  : React.FC= () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
 
+    const {data:queryData ,isLoading,error,refetch} = useQuery({
+        queryKey: ['adminUsers'],
+        queryFn: fetchAdminsManagement,
+    });
+
+
     // Filter users based on status and search query
     const filteredUsers = useMemo(() => {
-        return adminUsers.filter(user => {
-            const matchesStatus = selectedStatus === 'all' || user.status.toLowerCase() === selectedStatus.toLowerCase();
-            const matchesSearch = user.username.toLowerCase().includes(searchQuery.toLowerCase());
+        if (!queryData) return [];
+        return queryData.admins.filter(user => {
+            const matchesStatus = selectedStatus === 'all' || user.is_active == Number(selectedStatus);
+            const matchesSearch = user.name.toLowerCase().includes(searchQuery.toLowerCase());
             return matchesStatus && matchesSearch;
         });
-    }, [selectedStatus, searchQuery]);
+    }, [selectedStatus, searchQuery, queryData]);
 
     const handleStatusChange = (status: string) => {
         setSelectedStatus(status);
@@ -40,6 +50,7 @@ const AdminManagement  : React.FC= () => {
         console.log('New admin values:', values);
         setIsModalOpen(false);
     };
+    if (isLoading)  return <Loader/>;
 
     return (
         <>

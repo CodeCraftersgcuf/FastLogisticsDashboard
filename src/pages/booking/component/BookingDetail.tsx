@@ -3,33 +3,45 @@ import { OrderDetails, OrderDetailsType } from './OrderDetails';
 import HorizontalAlign from '../../../components/HorizontalAlign';
 import Button from '../../../components/buttons/Button';
 import MapContainer from '../../../components/MapContainer';
+import { useQuery } from '@tanstack/react-query';
+import { fetchParcelDetail } from '../../../queries/user/UserDetail';
+import { useParams } from 'react-router-dom';
+import { formatCreatedAt } from '../../../constants/help';
 
-const BookingDetail : React.FC = () => {
+const BookingDetail: React.FC = () => {
+  const {id} = useParams();
+
+  const { data: rawParcelDetail, isLoading, refetch } = useQuery({
+    queryKey: ["userdetail"],
+    queryFn: () => fetchParcelDetail(parseInt(id)),
+  });
+
+  console.log('Fetch data : ', rawParcelDetail);
   const sampleOrder: OrderDetailsType = {
-    orderId: 'ORD-12345678',
-    pickupAddress: 'No 1, abcdfeff street, ibadan, Oyo State',
-    deliveryAddress: 'No 1, abcdfeff street, ibadan, Oyo State',
+    orderId: rawParcelDetail?.data.id,
+    pickupAddress: rawParcelDetail?.data.sender_address,
+    deliveryAddress: rawParcelDetail?.data.receiver_address,
     riderName: 'Adewale Simon',
-    customerName: 'Adebisi Lateefat',
-    pickupDateTime: '22/02/25 - 11:24 PM',
-    deliveryDateTime: '22/02/25 - 11:40 PM',
-    packageName: 'Nokia Smartphone',
-    packageCategory: 'Adewale Simon',
-    packageValue: 'N100,000 - N200,000',
-    description: 'Nil',
-    payOnDelivery: true,
-    podAmount: 20000,
-    deliveryFeePayment: 'User',
-    paymentMethod: 'Wallet',
-    deliveryFee: 2,
-    total: 22000,
-    deliveryStatus: 'Completed'
+    customerName: rawParcelDetail?.data.sender_name,
+    pickupDateTime: formatCreatedAt(rawParcelDetail?.data.picked_up_at),
+    deliveryDateTime: formatCreatedAt(rawParcelDetail?.data.delivered_at),
+    packageName: rawParcelDetail?.data.parcel_name,
+    packageCategory: rawParcelDetail?.data.parcel_category,
+    packageValue: rawParcelDetail?.data.parcel_value,
+    description: rawParcelDetail?.data.description,
+    payOnDelivery: rawParcelDetail?.data.status,
+    podAmount: rawParcelDetail?.data.amount,
+    deliveryFeePayment: rawParcelDetail?.data.is_delivery_confirmed,
+    paymentMethod: rawParcelDetail?.data.payment_method,
+    deliveryFee: rawParcelDetail?.data.delivery_fee,
+    total: rawParcelDetail?.data.total_amount,
+    deliveryStatus: rawParcelDetail?.data.status
   };
   return (
     <>
       <div className="bg-white">
         <HorizontalAlign havsShadow={true}>
-          <h1 className="text-2xl font-semibold px-6"><span className='text-black opacity-50'>Bookings Detail</span> / ORD-12345678</h1>
+          <h1 className="text-2xl font-semibold px-6"><span className='text-black opacity-50'>Bookings Detail</span> / ORD-{sampleOrder.orderId}</h1>
         </HorizontalAlign>
       </div>
 

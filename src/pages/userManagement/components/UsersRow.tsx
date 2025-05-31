@@ -4,17 +4,11 @@ import Button from '../../../components/buttons/Button';
 import MoreDropdown from '../../../components/MoreDropdown';
 import { useNavigate } from 'react-router-dom';
 import { AlertOctagon, AlertTriangle } from 'lucide-react';
+import { User } from '../../../queries/user/UserManagement';
+import { API_DOMAIN_Img } from '../../../apiConfig';
 
 interface props {
-    displayData: {
-        id: number;
-        profile_image?: string;
-        username: string;
-        email: string;
-        phone: string;
-        wallet_balance: number | string;
-        status: string;
-    };
+    displayData:User;
 }
 
 
@@ -27,24 +21,24 @@ const UsersRow: React.FC<props> = ({ displayData }) => {
             </td>
             <td className="p-2">
                 <div className='flex items-center gap-2'>
-                    <img src={displayData.profile_image || dummyImage()} alt="" className='w-10 h-10 rounded-full' />
-                    {displayData.username}
+                    <img src={API_DOMAIN_Img+ displayData.profile_picture} alt="" className='w-10 h-10 rounded-full' />
+                    {displayData.name}
                 </div>
             </td>
             <td className="p-2">{displayData.email}</td>
             <td className="p-2">{displayData.phone}</td>
-            <td className="p-2 text-center">N {formatAmount(displayData.wallet_balance)}</td>
+            <td className="p-2 text-center">N {formatAmount(displayData.wallet.balance)}</td>
             <td className="p-2">
                 <div className='flex justify-center items-center'>
-                    <div className={` ${displayData.status == 'active' ? 'bg-green-500' : 'bg-red-500'} rounded-full w-6 h-6`}></div>
+                    <div className={` ${displayData.is_active == 1 ? 'bg-green-500' : 'bg-red-500'} rounded-full w-6 h-6`}></div>
                 </div>
             </td>
             <td className='p-2'>
                 <div className='flex items-center justify-center gap-2'>
-                    <Button handleFunction={() => navigate(`/user/management/${displayData.username}/customer/detail`)}>
+                    <Button handleFunction={() => navigate(`/user/management/${displayData.id}/customer/detail`)}>
                         Customer Details
                     </Button>
-                    <Button bgColor='bg-black' TextColor='text-white'>
+                    <Button handleFunction={() => navigate(`/user/management/${displayData.id}/customer/transactions`)} bgColor='bg-black' TextColor='text-white'>
                         Transactions
                     </Button>
                 </div>

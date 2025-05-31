@@ -1,19 +1,13 @@
 import React from 'react'
-import { dummyImage,  formatCreatedAt } from '../../../constants/help';
+import { formatCreatedAt } from '../../../constants/help';
 import Button from '../../../components/buttons/Button';
 import { useNavigate } from 'react-router-dom';
 import images from '../../../constants/images';
+import { Admin } from '../../../queries/admin/adminManagement';
+import { API_DOMAIN_Img } from '../../../apiConfig';
 
 interface props {
-    displayData: {
-        id: number;
-        profile_image?: string;
-        username: string;
-        email:string;
-        role:string;
-        created_at:string;
-        status: string;
-    };
+    displayData: Admin;
 }
 
 
@@ -26,15 +20,15 @@ const AdminRow: React.FC<props> = ({ displayData }) => {
             </td>
             <td className="p-2">
                 <div className='flex items-center gap-2'>
-                    <img src={displayData.profile_image || dummyImage()} alt="" className='w-10 h-10 rounded-full' />
-                    {displayData.username}
+                    <img src={API_DOMAIN_Img + displayData.profile_picture} alt="" className='w-10 h-10 rounded-full' />
+                    {displayData.name}
                 </div>
             </td>
             <td className="p-2">{displayData.role}</td>
-            <td className="p-2 text-center">{formatCreatedAt(displayData.created_at)}</td>
+            <td className="p-2">{formatCreatedAt(displayData.created_at)}</td>
             <td className="p-2">
-                <div className='flex justify-center items-center'>
-                    <div className={` ${displayData.status == 'active' ? 'bg-green-500' : 'bg-red-500'} rounded-full w-6 h-6`}></div>
+                <div className=''>
+                    <div className={` ${displayData.is_active ? 'bg-green-500' : 'bg-red-500'} rounded-full w-4 h-4`}></div>
                 </div>
             </td>
             <td className='p-2'>
