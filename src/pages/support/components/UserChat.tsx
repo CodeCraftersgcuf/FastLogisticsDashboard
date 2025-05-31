@@ -4,9 +4,9 @@ import { dummyImage } from '../../../constants/help';
 type props = {
     UserImage?: string;
     UserName: string;
-    LastMessage: string;
-    LastMessageTime: string;
-    LastMessageCount: string;
+    LastMessage?: string;
+    LastMessageTime?: string;
+    LastMessageCount?: string;
     UserId: number;
     onSelectChat: (user: any) => void;
 }
@@ -38,13 +38,13 @@ const UserChat : React.FC<props> = ({
                 <img src={UserImage} alt={UserName} className='w-14 h-14 rounded-full' />
                 <div className='flex flex-col justify-between gap-1'>
                     <h1 className='text-lg font-bold'>{UserName}</h1>
-                    <h1 className='text-gray-500'>{LastMessage}</h1>
+                    {LastMessage && <h1 className='text-gray-500'>{LastMessage}</h1>}
                 </div>
             </div>
-            <div className='flex flex-col justify-between gap-2'>
+            {LastMessageCount && <div className='flex flex-col justify-between gap-2'>
                 <h1 className={`w-6 h-6 bg-purple-800 rounded-full flex items-center justify-center self-end text-white ${parseInt(LastMessageCount) <= 0 && "opacity-0"}`}>{LastMessageCount}</h1>
                 <h1 className='text-gray-500 self-end'>{LastMessageTime}</h1>
-            </div>
+            </div>}
         </div>
     )
 }

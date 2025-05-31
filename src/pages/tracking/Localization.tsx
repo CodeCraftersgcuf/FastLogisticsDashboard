@@ -105,8 +105,8 @@ const Localization: React.FC = () => {
                     headerTr={['country', 'state', 'other']}
                     TrName={LocalizationRow}
                     TrPropsName={{
-                        onEdit: { handleEditLocation },
-                        onDelete: { handleDeleteLocation }
+                        onEdit:  handleEditLocation ,
+                        onDelete: handleDeleteLocation 
                     }}
                 />
             </div>

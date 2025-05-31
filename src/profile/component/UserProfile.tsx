@@ -7,17 +7,18 @@ interface UserProfileProps {
     name: string;
     email: string;
     phoneNumber: string;
-    location: string;
-    lastLogin: string;
-    accountCreation: string;
+    location?: string;
+    lastLogin?: string;
+    accountCreation?: string;
     walletBalance: number;
     profilePicture?: string;
-    status: 'online' | 'offline';
+    status: any;
   };
   disabledLeft?:boolean;
+  handleEdit:()=>void;
 }
 
-const UserProfile: React.FC<UserProfileProps> = ({ userData,disabledLeft }) => {
+const UserProfile: React.FC<UserProfileProps> = ({ userData,disabledLeft,handleEdit }) => {
   return (
     <div className="bg-[#470434] text-white rounded-2xl shadow-lg ">
       <div className={`grid grid-cols-1 ${ disabledLeft ? "lg:grid-cols-9" : "lg:grid-cols-12"} gap-6`}>
@@ -59,28 +60,38 @@ const UserProfile: React.FC<UserProfileProps> = ({ userData,disabledLeft }) => {
 
           <div className="flex-1 space-y-4">
             <div className="grid grid-cols-1 lg:grid-cols-2 justify-between gap-4">
-              <div className='space-y-2'>
-                <h3 className="font-medium opacity-80">Name</h3>
-                <p className="font-semibold">{userData.name}</p>
-              </div>
-              <div className='space-y-2'>
-                <h3 className="font-medium opacity-80">Email</h3>
-                <p className="font-semibold">{userData.email}</p>
-              </div>
-              <div className='space-y-2'>
-                <h3 className="font-medium opacity-80">Location</h3>
-                <p className="font-semibold">{userData.location}</p>
-              </div>
-              <div className='space-y-2'>
-                <h3 className="font-medium opacity-80">Phone Number</h3>
-                <p className="font-semibold">{userData.phoneNumber}</p>
-              </div>
-              <div className='space-y-2'>
-                <h3 className="font-medium opacity-80">Last Login</h3>
-                <p className="font-semibold">{userData.lastLogin}</p>
-              </div>
+                {userData.name && (
+                <div className='space-y-2'>
+                  <h3 className="font-medium opacity-80">Name</h3>
+                  <p className="font-semibold">{userData.name}</p>
+                </div>
+                )}
+                {userData.email && (
+                <div className='space-y-2'>
+                  <h3 className="font-medium opacity-80">Email</h3>
+                  <p className="font-semibold">{userData.email}</p>
+                </div>
+                )}
+                {userData.location && (
+                <div className='space-y-2'>
+                  <h3 className="font-medium opacity-80">Location</h3>
+                  <p className="font-semibold">{userData.location}</p>
+                </div>
+                )}
+                {userData.phoneNumber && (
+                <div className='space-y-2'>
+                  <h3 className="font-medium opacity-80">Phone Number</h3>
+                  <p className="font-semibold">{userData.phoneNumber}</p>
+                </div>
+                )}
+                {userData.lastLogin && (
+                <div className='space-y-2'>
+                  <h3 className="font-medium opacity-80">Last Login</h3>
+                  <p className="font-semibold">{userData.lastLogin}</p>
+                </div>
+                )}
               <div className="flex justify-end items-center gap-2">
-                <button className="p-2 hover:bg-white/10 cursor-pointer rounded-lg transition-colors border border-gray-400">
+                <button onClick={handleEdit} className="p-2 hover:bg-white/10 cursor-pointer rounded-lg transition-colors border border-gray-400">
                   <img src={images.profileBell} alt="icon" className='size-[20px]' />
                 </button>
                 <button className="p-2 hover:bg-white/10 cursor-pointer rounded-lg transition-colors border border-gray-400">

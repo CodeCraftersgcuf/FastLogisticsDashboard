@@ -11,6 +11,8 @@ import BannerRow from "./component/BannerRow";
 import { BannerStatics } from "../../constants/statisticsData";
 import BannerModal from "./component/BannerModal";
 import DeleteConfirmationModal from "./component/DeleteConfirmationModal";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { bannerResponse, fetchBanner, createBanner, updateBanner, deleteBanner } from "../../queries/banner/banner";
 
 const InAppBanner: React.FC = () => {
   const navigate = useNavigate();
@@ -20,26 +22,27 @@ const InAppBanner: React.FC = () => {
   const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedPeriod, setSelectedPeriod] = useState('9999');
-  const [filteredBanners, setFilteredBanners] = useState(BannerStatics);
+  const { data: queryData, isLoading, error, refetch } = useQuery({
+    queryKey: ['notification'],
+    queryFn: fetchBanner,
+  });
+  console.log(queryData, "queryData");
 
-  useEffect(() => {
-    const now = new Date();
-    const filterBanners = () => {
-      return BannerStatics.filter(banner => {
-        // Search filter
-        const matchesSearch = banner.location.toLowerCase().includes(searchTerm.toLowerCase());
+  const filterBanners = React.useMemo(() => {
+    if (!queryData) return [];
+    return queryData.filter((banner: bannerResponse) => {
+      const matchesSearch =
+        banner.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        banner.location.toLowerCase().includes(searchTerm.toLowerCase());
 
-        // Period filter
-        const bannerDate = new Date(banner.created_at);
-        const daysDifference = Math.floor((now.getTime() - bannerDate.getTime()) / (1000 * 60 * 60 * 24));
-        const withinPeriod = daysDifference <= parseInt(selectedPeriod);
+      const bookingDate = new Date(banner.created_at).getTime();
+      const now = Date.now();
+      const daysAgo = (now - bookingDate) / (1000 * 60 * 60 * 24);
+      const matchesDate = selectedPeriod === "9999" || daysAgo <= parseInt(selectedPeriod, 10);
 
-        return matchesSearch && withinPeriod;
-      });
-    };
-
-    setFilteredBanners(filterBanners());
-  }, [searchTerm, selectedPeriod]);
+      return matchesSearch && matchesDate;
+    });
+  }, [queryData, searchTerm, selectedPeriod]);
 
   const handleSearch = (term: string) => {
     setSearchTerm(term);
@@ -49,31 +52,74 @@ const InAppBanner: React.FC = () => {
     setSelectedPeriod(period);
   };
 
-  const handleBannerSubmit = (values: any) => {
-    console.log('Banner values:', values);
-    // Implement create/update logic here
-    setBannerModalOpen(false);
-    setSelectedBanner(null);
+  const { mutate: createMutation, isPending: isCreating } = useMutation({
+    mutationKey: ['createBanner'],
+    mutationFn: (data: FormData) => createBanner(data),
+    onSuccess: () => {
+      refetch();
+      setBannerModalOpen(false);
+      setSelectedBanner(null);
+    },
+    onError: (error) => {
+      console.error('Error creating banner:', error);
+    },
+  });
+
+  const { mutate: updateMutation, isPending: isUpdating } = useMutation({
+    mutationKey: ['updateBanner'],
+    mutationFn: ({ data, id }: { data: FormData; id: number }) => updateBanner(data, id),
+    onSuccess: () => {
+      refetch();
+      setBannerModalOpen(false);
+      setSelectedBanner(null);
+    },
+    onError: (error) => {
+      console.error('Error updating banner:', error);
+    },
+  });
+
+  const { mutate: deleteMutation } = useMutation({
+    mutationKey: ['deleteBanner'],
+    mutationFn: (id: number) => deleteBanner(id),
+    onSuccess: () => {
+      refetch();
+      setIsDeleteModalOpen(false);
+      setSelectedBanner(null);
+    },
+    onError: (error) => {
+      console.error('Error deleting banner:', error);
+    },
+  });
+
+  const handleBannerSubmit = (values: bannerResponse) => {
+    const formData = new FormData();
+    formData.append('location', values.location);
+    formData.append('subject', values.subject);
+    if (values.image instanceof File || typeof values.image === 'string') {
+      formData.append('image', values.image);
+    }
+    if (modalMode === 'create') {
+      createMutation(formData);
+    } else if (modalMode === 'edit' && selectedBanner) {
+      updateMutation({ data: formData, id: selectedBanner.id });
+    }
   };
 
-  const handleEdit = (banner: any) => {
+  const handleEdit = (banner: bannerResponse) => {
     setSelectedBanner(banner);
     setModalMode('edit');
     setBannerModalOpen(true);
   };
 
-  const handleDelete = (banner: any) => {
+  const handleDelete = (banner: bannerResponse) => {
     setSelectedBanner(banner);
     setIsDeleteModalOpen(true);
   };
 
   const confirmDelete = () => {
     if (selectedBanner) {
-      console.log('Deleting banner:', selectedBanner.id);
-      // Implement delete logic here
+      deleteMutation(selectedBanner.id);
     }
-    setIsDeleteModalOpen(false);
-    setSelectedBanner(null);
   };
 
   return (
@@ -129,11 +175,11 @@ const InAppBanner: React.FC = () => {
           heading="Latest Banners"
           showHeading={true}
           headerTr={['Banner image', 'Location', 'Date', 'Actions']}
-          dataTr={filteredBanners}
+          dataTr={filterBanners}
           TrName={BannerRow}
           TrPropsName={{
-            onEdit: { handleEdit },
-            onDelete: { handleDelete }
+            onEdit: handleEdit,
+            onDelete: handleDelete
           }}
         //   <BannerRow 
         //     {...props} 
@@ -152,6 +198,7 @@ const InAppBanner: React.FC = () => {
         }}
         onSubmit={handleBannerSubmit}
         initialValues={selectedBanner}
+        isPending={isCreating || isUpdating}
         mode={modalMode}
       />
 

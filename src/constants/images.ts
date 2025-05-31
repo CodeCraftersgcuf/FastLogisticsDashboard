@@ -26,7 +26,9 @@ const images = {
   warning : '/assets/icons/Warning.png',
   delBlack : '/assets/icons/delBlack.png',
   editBlack : '/assets/icons/editBlack.png',
-  transactions : '/assets/icons/transactions.svg'
+  transactions : '/assets/icons/transactions.svg',
+  paginationLeft : '/assets/paginationLeft.png',
+  paginationRight : '/assets/paginationRight.png',
 };
 
 export default images;

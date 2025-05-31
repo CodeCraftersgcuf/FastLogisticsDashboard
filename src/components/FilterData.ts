@@ -1,4 +1,5 @@
 export const DateDropOptions = [
+    { name: 'today', value: '0' },
     { name: 'This week', value: '7' },
     { name: 'Last month', value: '30' },
     { name: 'Last 6 month', value: '180' },
@@ -8,8 +9,8 @@ export const DateDropOptions = [
 
 export const onlineStatus = [
     { name: 'All', value: 'all' },
-    { name: 'Online', value: 'online' },
-    { name: 'Offline', value: 'offline' },
+    { name: 'Online', value: "1" },
+    { name: 'Offline', value: "0" },
 ]
 
 export const bulkOptions = [
@@ -24,29 +25,29 @@ export const roles = [
 ];
 
 export const rolestabs = [
-    { value: 'all', name: 'All' },
+    { value: 'all', name: 'all' },
     { value: 'user', name: 'Users' },
     { value: 'rider', name: 'Riders' },
 ];
 
 export const typeOptions = [
-    { value: 'all', name: 'All' },
+    { value: 'all', name: 'all' },
     { value: 'topup', name: 'topup' },
     { value: 'withdrawal', name: 'withdrawal' },
 ]
 
 export const transactionstatus = [
-    { value: 'all', name: 'All' },
+    { value: 'all', name: 'all' },
     { value: 'pending', name: 'Pending' },
-    { value: 'success', name: 'Success' },
+    { value: 'completed', name: 'completed' },
     { value: 'failed', name: 'Failed' },
 ]
 
 export const bookingStatus = [
-    { value: 'all', name: 'All' },
-    { value: 'active', name: 'active' },
-    { value: 'completed', name: 'completed' },
-    { value: 'Scheduled', name: 'Scheduled' },
+    { value: 'all', name: 'all' },
+    { value: 'picked_up', name: 'picked up' },
+    { value: 'ordered', name: 'ordered' },
+    { value: 'delivered', name: 'delivered' },
 ]
 
 
@@ -59,12 +60,12 @@ export const riderStatus = [
 ]
 
 export const tierStatus = [
-    { "value": "tier1", "name": "Tier 1" },
-    { "value": "tier2", "name": "Tier 2" },
-    { "value": "tier3", "name": "Tier 3" },
-    { "value": "tier4", "name": "Tier 4" },
-    { "value": "tier5", "name": "Tier 5" },
-    { "value": "tier6", "name": "Tier 6" }
+    { "value": "1", "name": "Tier 1" },
+    { "value": "2", "name": "Tier 2" },
+    { "value": "3", "name": "Tier 3" },
+    { "value": "4", "name": "Tier 4" },
+    { "value": "5", "name": "Tier 5" },
+    { "value": "6", "name": "Tier 6" }
 ]
 
 export const tierstatus = [
